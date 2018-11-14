@@ -75,18 +75,44 @@ class PreferencesMatrixGenerator
     {
         switch (m_mode)
         {
+
             case kBestCase:
-                populateBestCaseMatrices();
+                // Best case is when men and women have the same preference lists
+                for (int i = 0; i < m_dataSize; i++)
+                {
+                    for (int j = 0 ; j < m_dataSize; j++)
+                    {
+                        m_menPreferenceMatrix[i][j] = j + 1;
+                        m_womenPreferenceMatrix[i][j] = j + 1;
+                    }
+                }
                 break;
 
             case kWorstCase:
-                populateWorstCaseMatrices();
+                // Worst case is when men and women have inverted preference lists
+                for (int i = 0; i < m_dataSize; i++)
+                {
+                    int k = (m_dataSize - 1);
+                    for (int j = 0; j < m_dataSize; j++)
+                    {
+                        m_menPreferenceMatrix[i][j] = j + 1;
+                        m_womenPreferenceMatrix[i][j] = k + 1;
+                        --k;
+                    }
+                }
                 break;
-
             case kRandom:
-                populateRandomCaseMatrices();
-                break;
+                for (int i = 0; i < m_dataSize; i++)
+                {
+                    for (int j = 0 ; j < m_dataSize; j++)
+                    {
+                        m_menPreferenceMatrix[i][j] = j + 1;
+                        m_womenPreferenceMatrix[i][j] = j + 1;
+                    }
+                }
+                shufflePrefernceMatrices();
 
+                break;
             default:
                 System.out.println("Invalid Mode!");
                 System.out.println("This should not happen!");
@@ -107,75 +133,13 @@ class PreferencesMatrixGenerator
         }
     }
 
-    public void shufflePreferenceMatrices()
+    public void shufflePrefernceMatrices()
     {
         for (int i = 0; i < m_dataSize; ++i)
         {
             shuffleArray(m_menPreferenceMatrix[i]);
             shuffleArray(m_womenPreferenceMatrix[i]);
         }
-    }
-
-    private void populateBestCaseMatrices()
-    {
-        // Best case is when men and women have the same preference lists
-        int [] temp = new int[m_dataSize];
-
-        for (int i = 0; i < m_dataSize; i++)
-        {
-            temp[i] = i + 1;
-        }
-
-        final int kNumberOfRotations = 1;
-        for (int i = 0; i < m_dataSize; i++)
-        {
-            m_menPreferenceMatrix[i] = temp.clone();
-            m_womenPreferenceMatrix[i] = temp.clone();
-
-            leftRotateArray(temp, kNumberOfRotations);
-        }
-    }
-
-    private void populateWorstCaseMatrices()
-    {
-        // Worst case is when men and women have inverted preference lists
-        // TODO: https://ir.nctu.edu.tw/bitstream/11536/4865/1/A1984TX77500006.pdf
-        // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.52.824&rep=rep1&type=pdf
-        System.out.println("populateWorstCaseMatrices() Function Not Implemented!");
-        System.exit(-100);
-    }
-
-    private void populateRandomCaseMatrices()
-    {
-        // Random Case
-        for (int i = 0; i < m_dataSize; i++)
-        {
-            for (int j = 0 ; j < m_dataSize; j++)
-            {
-                m_menPreferenceMatrix[i][j] = j + 1;
-                m_womenPreferenceMatrix[i][j] = j + 1;
-            }
-        }
-        shufflePreferenceMatrices();
-    }
-
-    private void leftRotateArray(int arr[], int numberOfRotations)
-    {
-        for (int i = 0; i < numberOfRotations; i++)
-        {
-            leftRotateArrayByOne(arr);
-        }
-    }
-
-    private void leftRotateArrayByOne(int arr[])
-    {
-        int i, temp;
-        temp = arr[0];
-        for (i = 0; i < (arr.length - 1); i++)
-        {
-            arr[i] = arr[i + 1];
-        }
-        arr[i] = temp;
     }
 
     public int[][] getMenPreferenceMatrix()
