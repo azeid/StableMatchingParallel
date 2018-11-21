@@ -1,3 +1,5 @@
 # IntelliJ Idea Config
 .idea
 
+out/
+
