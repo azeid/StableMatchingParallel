@@ -147,7 +147,7 @@ public class SMPProducerConsumer {
     public static void main(String[] args) {
 
         if (args.length != 2) {
-            System.out.println("Usage:\njava SMP <input_file> <m|w>");
+            System.out.println("Usage:\njava smp.SMP <input_file> <m|w>");
             return;
         }
 
