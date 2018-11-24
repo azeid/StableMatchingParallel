@@ -21,14 +21,12 @@ public class SMP
         String kPreference = "";
         String kOutputFile = "";
 
-        final int kExpectedNumberOfArguments = 3;
-
-        if(kExpectedNumberOfArguments == args.length)
+        if(2 == args.length || 3 == args.length)
         {
             // Assuming File In Same Directory
             final String kFileName = args[0];
             kPreference = args[1];
-            kOutputFile = args[2];
+            kOutputFile = (3 == args.length) ? args[2] : "";
             try (Stream<String> stream = Files.lines(Paths.get(kFileName)))
             {
                 // This remove data from stream object into fileLines
@@ -81,6 +79,12 @@ public class SMP
             kOutputFile = "test1.txt";
 
             // Check generating matrices using PreferencesMatrixGenerator class
+        }
+        else
+        {
+            System.out.println("Invalid Arguments");
+            System.exit(-100);
+            System.out.println("Usage: java SMP <input_file> <m|w> optional:<output_file>");
         }
 
         //printDataSet2DArray(OriginalMenDataSet2D, dataSetSize);
@@ -173,8 +177,8 @@ public class SMP
             }
         }
 
-        //final String finalMatchingGraph = myBipartiteGraph.getFinalMatchingGraphToString();
-        //System.out.println(finalMatchingGraph);
+        final String finalMatchingGraph = myBipartiteGraph.getFinalMatchingGraphToString();
+        System.out.println(finalMatchingGraph);
         System.out.println("Number of Rejections: " + numberOfRejections);
         // n^2 - 2n + 1
         final double kWorstCaseRejections = Math.round(
@@ -184,7 +188,10 @@ public class SMP
             System.out.println("This is a Worst Case");
         }
 
-        myBipartiteGraph.writeFinalMatchingToFile(outputFile);
+        if(!outputFile.isEmpty())
+        {
+            myBipartiteGraph.writeFinalMatchingToFile(outputFile);
+        }
     }
 
     public static void printDataSet2DArray(int[][] dataSet2DArray, int numberOfRowsAndColumns)
