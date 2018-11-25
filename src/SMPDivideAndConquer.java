@@ -171,8 +171,9 @@ public class SMPDivideAndConquer
         return Integer.parseInt(str.substring(1));
     }
 
-    class WorkerThread implements Callable<WorkerThread.Result>
+    class MergeTwoMatchingSets
     {
+
         private MatchingPair[] m_leftMatching;
         private MatchingPair[] m_rightMatching;
         private MatchingPair[] m_finalMatching;
@@ -182,19 +183,10 @@ public class SMPDivideAndConquer
             MatchingPair[] m_finalMatching;
         }
 
-        public WorkerThread(MatchingPair[] leftMatching, MatchingPair[] rightMatching)
+        public MergeTwoMatchingSets(MatchingPair[] leftMatching, MatchingPair[] rightMatching)
         {
             m_leftMatching = leftMatching.clone();
             m_rightMatching = rightMatching.clone();
-        }
-
-        @Override
-        public Result call()
-        {
-            matchAndAdvanceConflictsIfFound();
-            Result result = new Result();
-            result.m_finalMatching = m_finalMatching;
-            return result;
         }
 
         public void matchAndAdvanceConflictsIfFound()
@@ -313,13 +305,167 @@ public class SMPDivideAndConquer
             return nextOtherGenderPrefName;
         }
 
-        public MatchingPair[] getFinalMatching()
+        public Result calculateResult()
         {
-            return m_finalMatching;
+            matchAndAdvanceConflictsIfFound();
+            Result result = new Result();
+            result.m_finalMatching = m_finalMatching;
+            return result;
+        }
+
+    } // MergeTwoMatchingSets
+
+    class CallableThread implements Callable<MergeTwoMatchingSets.Result>
+    {
+        private MergeTwoMatchingSets m_mergeTwoSet;
+        private MergeTwoMatchingSets.Result m_result;
+
+        public CallableThread(MatchingPair[] leftMatching, MatchingPair[] rightMatching)
+        {
+            m_mergeTwoSet = new MergeTwoMatchingSets(leftMatching, rightMatching);
+        }
+
+        @Override
+        public MergeTwoMatchingSets.Result call()
+        {
+            m_result = m_mergeTwoSet.calculateResult();
+            return m_result;
         }
     }
 
-    public String run()
+    class RunnableThread implements Runnable
+    {
+        private MergeTwoMatchingSets m_mergeTwoSet;
+        private MergeTwoMatchingSets.Result m_result;
+        private CopyOnWriteArrayList<MatchingPair[]> m_threadSafeList;
+
+        public RunnableThread(MatchingPair[] leftMatching,
+                              MatchingPair[] rightMatching,
+                              CopyOnWriteArrayList<MatchingPair[]> threadSafeList)
+        {
+            m_mergeTwoSet = new MergeTwoMatchingSets(leftMatching, rightMatching);
+            m_threadSafeList = threadSafeList;
+
+        }
+
+        @Override
+        public void run()
+        {
+            m_result = m_mergeTwoSet.calculateResult();
+            m_threadSafeList.add(m_result.m_finalMatching);
+        }
+    }
+
+    public String runThread()
+    {
+        //final long startTime = System.nanoTime();
+
+        MatchingPair[] initialMatchingList = getInitialMatching();
+
+        ArrayList<MatchingPair[]> curretMatchingList = new ArrayList<MatchingPair[]>();
+
+        for(int i = 0; i < initialMatchingList.length; ++i)
+        {
+            MatchingPair[] matchingPair = new MatchingPair[1];
+            matchingPair[0] = initialMatchingList[i];
+            curretMatchingList.add(matchingPair);
+        }
+
+        int matchingResultSize = curretMatchingList.size();
+
+        String finalMatchingString = "";
+
+        /*
+        final int kNumberOfThreads = 20;
+        ExecutorService pool =
+                new ThreadPoolExecutor(
+                        kNumberOfThreads, // core size
+                        kNumberOfThreads, // max size
+                        60, // idle timeout
+                        TimeUnit.SECONDS,
+                        new ArrayBlockingQueue<Runnable>(initialMatchingList.length)); // queue with a size
+                        */
+
+        //ExecutorService pool = Executors.newCachedThreadPool();
+
+        while(1 != matchingResultSize)
+        {
+            final boolean kOddNumberOfChuncks = (0 != matchingResultSize % 2) && (1 != matchingResultSize);
+            MatchingPair[] leftOverChunck = new MatchingPair[1];
+
+            if(kOddNumberOfChuncks)
+            {
+                leftOverChunck =
+                        Arrays.copyOf(
+                                curretMatchingList.get(matchingResultSize - 1),
+                                curretMatchingList.get(matchingResultSize - 1).length);
+            }
+
+            final int kNumberOfThreadPools = (kOddNumberOfChuncks ? (matchingResultSize - 1) : matchingResultSize) / 2;
+
+            ExecutorService pool = Executors.newCachedThreadPool();
+
+            //ExecutorService pool = Executors.newFixedThreadPool(kNumberOfThreadPools/2);
+
+
+
+
+            CopyOnWriteArrayList<MatchingPair[]> threadSafeResultList = new CopyOnWriteArrayList<MatchingPair[]>();
+
+            // increment by 2 since we are processing two chuncks at a time
+            for(int i = 0; i < (matchingResultSize - 1); i = (i+2))
+            {
+                // TODO: remove threadsafe list since it isn ot required for left and right
+                pool.execute(new RunnableThread(curretMatchingList.get(i), curretMatchingList.get(i+1), threadSafeResultList));
+            }
+
+            try
+            {
+                pool.shutdownNow();
+
+                final int kTimeoutIsSeconds = 10;
+                if (!pool.awaitTermination(kTimeoutIsSeconds, TimeUnit.SECONDS))
+                {
+                    System.out.println("Threads Did Not Terminate Successfully!");
+                    System.exit(-100);
+                }
+
+                matchingResultSize = kOddNumberOfChuncks ? (threadSafeResultList.size() + 1) : threadSafeResultList.size();
+
+                curretMatchingList = new ArrayList<MatchingPair[]>(threadSafeResultList);
+
+                threadSafeResultList.clear();
+
+                if(kOddNumberOfChuncks)
+                {
+                    curretMatchingList.add(leftOverChunck);
+                }
+
+                if(1 == matchingResultSize)
+                {
+                    finalMatchingString = FinalMatchingArrayToString(curretMatchingList.get(0));
+                }
+            }
+            catch (InterruptedException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+
+        if(finalMatchingString.isEmpty())
+        {
+            System.out.println("Final matching string is empty!");
+            System.exit(-100);
+        }
+
+        //final long endTime = System.nanoTime();
+        //final long totalTime = endTime - startTime;
+        //System.out.println("Total time taken for <SMPDivideAndConquer> is "+ totalTime);
+
+        return finalMatchingString;
+    }
+
+    public String runCallable()
     {
         MatchingPair[] initialMatchingList = getInitialMatching();
 
@@ -331,23 +477,23 @@ public class SMPDivideAndConquer
 
         while(1 != matchingResultSize)
         {
-            ExecutorService pool = Executors.newFixedThreadPool(matchingResultSize);
+            //ExecutorService pool = Executors.newFixedThreadPool(matchingResultSize);
+            ExecutorService pool = Executors.newCachedThreadPool();
 
-            List<Callable<WorkerThread.Result>> callables = new ArrayList<Callable<WorkerThread.Result>>();
+            List<Callable<MergeTwoMatchingSets.Result>> callables = new ArrayList<Callable<MergeTwoMatchingSets.Result>>();
 
             // increment by 2 since we are processing two chuncks at a time
             for(int i = 0; i < (matchingResultSize - 1); i = (i+2))
             {
                 // TODO: I want results to be added to queue in right order
                 //pool.submit(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1], i));
-                int indexOffset = arrayChuncks[0].length * i;
-                callables.add(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1]));
+                callables.add(new CallableThread(arrayChuncks[i], arrayChuncks[i+1]));
             }
 
             try
             {
                 // There is a hard requirement that results are in order
-                List<Future<WorkerThread.Result>> results = pool.invokeAll(callables);
+                List<Future<MergeTwoMatchingSets.Result>> results = pool.invokeAll(callables);
 
                 final boolean kOddNumberOfChuncks = (0 != matchingResultSize % 2) && (1 != matchingResultSize);
                 MatchingPair[] leftOverChunck = new MatchingPair[1];
@@ -365,7 +511,7 @@ public class SMPDivideAndConquer
                 // The results are in order.
                 // TODO: Order does not matter the way it is now implemented. Try using threads
                 int i = 0;
-                for(Future<WorkerThread.Result> result: results)
+                for(Future<MergeTwoMatchingSets.Result> result: results)
                 {
                     // copy result into arrayChuncks so we can iterate again
                     arrayChuncks[i] = Arrays.copyOf(result.get().m_finalMatching, result.get().m_finalMatching.length);
@@ -423,14 +569,14 @@ public class SMPDivideAndConquer
         //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.getDefaultInfo();
 
         //String[] customArgs = new String[2];
-        //customArgs[0] = "out\\production\\StableMatchingParallel\\Random_200.txt";
+        //customArgs[0] = "out\\production\\StableMatchingParallel\\Random_5.txt";
         //customArgs[1] = "w";
-
         //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(customArgs);
 
         SMPDivideAndConquer smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo);
 
-        final String kFinalMatchingString = smpDivideAndConquer.run();
+        //final String kFinalMatchingString = smpDivideAndConquer.runCallable();
+        final String kFinalMatchingString = smpDivideAndConquer.runThread();
         System.out.println(kFinalMatchingString);
 
         // Log End Time
