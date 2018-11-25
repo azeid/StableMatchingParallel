@@ -1,10 +1,8 @@
 package smp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,7 +12,7 @@ public class SMPProducerConsumer {
     private int[][] pref1;
     private int[][] pref2;
     private int[] proposed;
-    private boolean[][] assignment;
+    private int[] matching;
 
 
     public SMPProducerConsumer(int[][] man_preferences, int[][] women_preferences, String optimality) {
@@ -29,26 +27,35 @@ public class SMPProducerConsumer {
         int count = man_preferences.length;
 
         proposed = new int[count];
-        assignment = new boolean[count][count];
+        matching = new int[count];
+        Arrays.fill(matching, -1);
     }
 
     class Worker implements Runnable {
 
         private ConcurrentLinkedQueue<Integer> _queue;
+        private Object[] rings;
 
-        public Worker(ConcurrentLinkedQueue<Integer> queue) {
+        public Worker(ConcurrentLinkedQueue<Integer> queue, Object[] rings) {
             _queue = queue;
+            this.rings = rings;
         }
 
         @Override
         public void run() {
             Integer freePerson;
+
+            //System.out.printf("T %d| I'm new here!\n", Thread.currentThread().getId());
             while ((freePerson = _queue.poll()) != null) {
+
                 int preferredPerson = findPreferredPerson(freePerson);
 
-                synchronized (assignment) {
+                //System.out.printf("T %d| Man %d about to propose to %d\n", Thread.currentThread().getId(), freePerson, preferredPerson);
+                synchronized (rings[preferredPerson]) {
+                    //System.out.printf("T %d| Man %d proposing to %d\n", Thread.currentThread().getId(), freePerson, preferredPerson);
                     int pairedPerson = proposeToPerson(freePerson, preferredPerson);
                     if (pairedPerson < 0) {
+                        //System.out.printf("T %d| Man %d accepted by %d\n", Thread.currentThread().getId(), freePerson, preferredPerson);
                         assign(freePerson, preferredPerson);
                     } else {
                         int rejected;
@@ -57,17 +64,20 @@ public class SMPProducerConsumer {
                         } else {
                             rejected = pairedPerson;
                             assign(freePerson, preferredPerson);
+                            //System.out.printf("T %d| Man %d accepted by %d\n", Thread.currentThread().getId(), freePerson, preferredPerson);
                         }
+                        //System.out.printf("T %d| Man %d rejected by %d\n", Thread.currentThread().getId(), rejected, preferredPerson);
                         _queue.add(rejected);
                     }
                 }
             }
+            //System.out.printf("T %d| Nothing to do left. I'm done.\n", Thread.currentThread().getId());
         }
 
         private boolean prefers(int preferredPerson, int freePerson, int pairedPerson) {
             int rankFreePerson = -1;
             int rankPairedPerson = -1;
-            for (int i = 0; i < pref2.length; i++) {
+            for (int i = 0; i < pref2.length && (rankFreePerson < 0 || rankPairedPerson < 0); i++) {
                 if (pref2[preferredPerson][i] - 1 == freePerson) {
                     rankFreePerson = i;
                 }
@@ -80,41 +90,35 @@ public class SMPProducerConsumer {
         }
 
         private void assign(int freePerson, int preferredPerson) {
-            for (int i = 0; i < assignment.length; i++) {
-                assignment[i][preferredPerson] = i == freePerson;
-            }
+            matching[preferredPerson] = freePerson;
         }
 
         private int findPreferredPerson(int freePerson) {
-            return pref1[freePerson][proposed[freePerson]] - 1;
+            int nextToPropose = proposed[freePerson];
+            return pref1[freePerson][nextToPropose] - 1;
         }
 
         private int proposeToPerson(int freePerson, int preferredPerson) {
-            int pairedWith = -1;
-            for (int i = 0; i < assignment.length; i++) {
-                if (assignment[i][preferredPerson]) {
-                    pairedWith = i;
-                    break;
-                }
-            }
             proposed[freePerson]++;
-            return pairedWith;
+            return matching[preferredPerson];
         }
-
-
     }
 
     public String run() {
         int count = pref1.length;
         List<Integer> allFree = IntStream.range(0, count).boxed().collect(Collectors.toList());
         ConcurrentLinkedQueue<Integer> freeList = new ConcurrentLinkedQueue<>(allFree);
+        Object[] rings = new Object[count];
+        for(int i = 0; i < count; i++) {
+            rings[i] = new Object();
+        }
 
         ArrayList<Future> waitFor = new ArrayList<>();
 
         ExecutorService pool = Executors.newCachedThreadPool();
 
         for (int i = 0; i < count; i++) {
-            waitFor.add(pool.submit(new Worker(freeList)));
+            waitFor.add(pool.submit(new Worker(freeList, rings)));
         }
 
         for (Future w : waitFor) {
@@ -135,12 +139,8 @@ public class SMPProducerConsumer {
     private String formatAssignment() {
         StringBuffer sb = new StringBuffer();
 
-        for (int i = 0; i < assignment.length; i++) {
-            for (int j = 0; j < assignment[i].length; j++) {
-                if (assignment[i][j]) {
-                    sb.append(String.format("(%d,%d)\n", i+1, j+1));
-                }
-            }
+        for (int i = 0; i < matching.length; i++) {
+            sb.append(String.format("(%d, %d)\n", i + 1, matching[i] + 1));
         }
 
         return sb.toString();
@@ -150,14 +150,6 @@ public class SMPProducerConsumer {
 
         if (args.length != 2) {
             System.out.println("Usage:\njava smp.SMP <input_file> <m|w>");
-            return;
-        }
-
-        Scanner input;
-        try {
-            input = new Scanner(new File(args[0]));
-        } catch (FileNotFoundException e) {
-            System.out.printf("File \"%s\" not found.\n", args[0]);
             return;
         }
 
@@ -171,20 +163,9 @@ public class SMPProducerConsumer {
             optimality = args[1];
         }
 
-        int n = input.nextInt();
+        SMPData data = SMPData.loadFromFile(args[0]);
 
-        int[][] man_preferences = new int[n][n];
-        int[][] woman_preferences = new int[n][n];
-
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                man_preferences[i][j] = input.nextInt();
-
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                woman_preferences[i][j] = input.nextInt();
-
-        SMPProducerConsumer smp = new SMPProducerConsumer(man_preferences, woman_preferences, optimality);
+        SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), optimality);
         System.out.println(smp.run());
     }
 

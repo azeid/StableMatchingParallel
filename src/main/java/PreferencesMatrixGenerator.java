@@ -141,8 +141,47 @@ class PreferencesMatrixGenerator
         // Worst case is when men and women have inverted preference lists
         // TODO: https://ir.nctu.edu.tw/bitstream/11536/4865/1/A1984TX77500006.pdf
         // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.52.824&rep=rep1&type=pdf
-        System.out.println("populateWorstCaseMatrices() Function Not Implemented!");
-        System.exit(-100);
+
+        for (int i = 0; i < m_dataSize; i++) {
+            for (int j = m_dataSize - 1; j >= 0; j--) {
+                m_menPreferenceMatrix[i][j] = j + 1;
+            }
+
+            reverseArray(m_menPreferenceMatrix[i], 0, m_dataSize - 2);
+            rotateArrayRight(m_menPreferenceMatrix[i], i + 1, 0, m_dataSize - 2);
+        }
+
+        for (int i = 0; i < m_dataSize; i++) {
+            for (int j = 0; j < m_dataSize; j++) {
+                m_womenPreferenceMatrix[i][j] = m_dataSize - j;
+            }
+
+            rotateArrayRight(m_womenPreferenceMatrix[i], i, 0, m_dataSize - 1);
+        }
+
+        leftRotateArray(m_womenPreferenceMatrix[0], 1);
+        rotateArrayRight(m_womenPreferenceMatrix[m_dataSize - 1], 1, 0, m_dataSize -1);
+    }
+
+    private void rotateArrayRight(int arr[], int offset, int start, int end) {
+        offset = offset % (end + 1);
+        if (offset == 0) return;
+
+        reverseArray(arr, start, end);
+        reverseArray(arr, start, offset - 1);
+        reverseArray(arr, offset, end);
+    }
+
+    private void reverseArray(int arr[], int start, int end) {
+        for (; start < end; start++, end--) {
+            swap(arr, start, end);
+        }
+    }
+
+    private void swap(int arr[], int i, int j) {
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
     }
 
     private void populateRandomCaseMatrices()
@@ -196,34 +235,34 @@ class PreferencesMatrixGenerator
 
     public String toString()
     {
-        String outputStr = new String();
+        StringBuilder outPut = new StringBuilder();
 
-        outputStr += Integer.toString(m_dataSize);
-        outputStr += "\n";
+        outPut.append(m_dataSize);
+        outPut.append('\n');
 
-        String menPreferencesStr = new String();
-        String womenPreferencesStr = new String();
+        StringBuilder menPreferencesStr = new StringBuilder();
+        StringBuilder womenPreferencesStr = new StringBuilder();
 
         for (int i = 0; i < m_dataSize; i++)
         {
             for (int j = 0; j < m_dataSize; j++)
             {
-                menPreferencesStr += Integer.toString(m_menPreferenceMatrix[i][j]);
-                womenPreferencesStr += Integer.toString(m_womenPreferenceMatrix[i][j]);
+                menPreferencesStr.append(m_menPreferenceMatrix[i][j]);
+                womenPreferencesStr.append(m_womenPreferenceMatrix[i][j]);
                 if (j != (m_dataSize - 1))
                 {
-                    menPreferencesStr += " ";
-                    womenPreferencesStr += " ";
+                    menPreferencesStr.append(' ');
+                    womenPreferencesStr.append(' ');
                 }
             }
-            menPreferencesStr += "\n";
-            womenPreferencesStr += "\n";
+            menPreferencesStr.append('\n');
+            womenPreferencesStr.append('\n');
         }
 
-        outputStr += menPreferencesStr;
-        outputStr += womenPreferencesStr;
+        outPut.append(menPreferencesStr);
+        outPut.append(womenPreferencesStr);
 
-        return outputStr;
+        return outPut.toString();
     }
 
     // TODO: maybe we should have a class that handles reading and writing to files to avoid code duplication
