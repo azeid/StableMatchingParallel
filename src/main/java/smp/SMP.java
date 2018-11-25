@@ -1,3 +1,5 @@
+package smp;
+
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -94,8 +96,7 @@ public class SMP
                     OriginalMenDataSet2D,
                     OriginalWomenDataSet2D,
                     dataSetSize,
-                    kPreference,
-                    kOutputFile);
+                    kPreference);
         }
         else if (0 == kPreference.compareToIgnoreCase("w"))
         {
@@ -104,8 +105,7 @@ public class SMP
                     OriginalWomenDataSet2D,
                     OriginalMenDataSet2D,
                     dataSetSize,
-                    kPreference,
-                    kOutputFile);
+                    kPreference);
         }
         else
         {
@@ -116,15 +116,14 @@ public class SMP
         // Log End Time
         final long endTime = System.nanoTime();
         final long totalTime = endTime - startTime;
-        System.out.println("Total time taken for <SMP> is "+ totalTime);
+        System.out.println("Total time taken for <smp.SMP> is "+ totalTime);
     }
 
-    public static void performSMPAlgorithm(
+    public static String performSMPAlgorithm(
             int[][] optimalGenderDataSet2DArray,
             int[][] otherGenderDataSet2DArray,
             int numberOfRowsAndColumns,
-            String preference,
-            String outputFile)
+            String preference)
     {
         BipartiteGraph myBipartiteGraph = new BipartiteGraph(
                 optimalGenderDataSet2DArray,
@@ -175,16 +174,16 @@ public class SMP
 
         //final String finalMatchingGraph = myBipartiteGraph.getFinalMatchingGraphToString();
         //System.out.println(finalMatchingGraph);
-        System.out.println("Number of Rejections: " + numberOfRejections);
+        // System.out.println("Number of Rejections: " + numberOfRejections);
         // n^2 - 2n + 1
         final double kWorstCaseRejections = Math.round(
                 Math.pow(numberOfRowsAndColumns, 2) - (2 * numberOfRowsAndColumns) + 1);
         if((int)kWorstCaseRejections == numberOfRejections)
         {
-            System.out.println("This is a Worst Case");
+            // System.out.println("This is a Worst Case");
         }
 
-        myBipartiteGraph.writeFinalMatchingToFile(outputFile);
+        return myBipartiteGraph.getFinalMatchingGraphToString();
     }
 
     public static void printDataSet2DArray(int[][] dataSet2DArray, int numberOfRowsAndColumns)
