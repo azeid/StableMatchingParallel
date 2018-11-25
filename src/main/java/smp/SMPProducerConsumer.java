@@ -12,10 +12,7 @@ public class SMPProducerConsumer {
     private int[][] pref1;
     private int[][] pref2;
     private int[] proposed;
-    private boolean[][] assignment;
-    private boolean[] assigned;
     private int[] matching;
-    private Object monitor;
 
 
     public SMPProducerConsumer(int[][] man_preferences, int[][] women_preferences, String optimality) {
@@ -30,10 +27,6 @@ public class SMPProducerConsumer {
         int count = man_preferences.length;
 
         proposed = new int[count];
-        assignment = new boolean[count][count];
-        assigned = new boolean[count];
-        monitor = new Object();
-
         matching = new int[count];
         Arrays.fill(matching, -1);
     }
@@ -52,26 +45,8 @@ public class SMPProducerConsumer {
         public void run() {
             Integer freePerson;
 
-            while(!allMatched()) {
-
-                while ((freePerson = _queue.poll()) == null && !allMatched()) {
-                    synchronized (monitor) {
-                        try {
-                            //System.out.printf("T %d| Waiting.. \n", Thread.currentThread().getId());
-                            monitor.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (freePerson == null) {
-                    //System.out.printf("T %d| All Matched, I'm done.. \n", Thread.currentThread().getId());
-                    synchronized (monitor) {
-                        monitor.notifyAll();
-                    }
-                    return;
-                }
+            //System.out.printf("T %d| I'm new here!\n", Thread.currentThread().getId());
+            while ((freePerson = _queue.poll()) != null) {
 
                 int preferredPerson = findPreferredPerson(freePerson);
 
@@ -93,23 +68,10 @@ public class SMPProducerConsumer {
                         }
                         //System.out.printf("T %d| Man %d rejected by %d\n", Thread.currentThread().getId(), rejected, preferredPerson);
                         _queue.add(rejected);
-                        synchronized (monitor) {
-                            monitor.notifyAll();
-                        }
                     }
                 }
             }
-            synchronized (monitor) {
-                monitor.notifyAll();
-            }
             //System.out.printf("T %d| Nothing to do left. I'm done.\n", Thread.currentThread().getId());
-        }
-
-        private boolean allMatched(){
-            for (boolean matched : assigned) {
-                if (!matched) return false;
-            }
-            return true;
         }
 
         private boolean prefers(int preferredPerson, int freePerson, int pairedPerson) {
@@ -128,10 +90,6 @@ public class SMPProducerConsumer {
         }
 
         private void assign(int freePerson, int preferredPerson) {
-//            for (int i = 0; i < assignment.length; i++) {
-//                assignment[i][preferredPerson] = i == freePerson;
-//            }
-            assigned[preferredPerson] = true;
             matching[preferredPerson] = freePerson;
         }
 
@@ -141,13 +99,6 @@ public class SMPProducerConsumer {
         }
 
         private int proposeToPerson(int freePerson, int preferredPerson) {
-//            int pairedWith = -1;
-//            for (int i = 0; i < assignment.length; i++) {
-//                if (assignment[i][preferredPerson]) {
-//                    pairedWith = i;
-//                    break;
-//                }
-//            }
             proposed[freePerson]++;
             return matching[preferredPerson];
         }
@@ -187,14 +138,6 @@ public class SMPProducerConsumer {
 
     private String formatAssignment() {
         StringBuffer sb = new StringBuffer();
-
-//        for (int i = 0; i < assignment.length; i++) {
-//            for (int j = 0; j < assignment[i].length; j++) {
-//                if (assignment[i][j]) {
-//                    sb.append(String.format("(%d,%d)\n", i+1, j+1));
-//                }
-//            }
-//        }
 
         for (int i = 0; i < matching.length; i++) {
             sb.append(String.format("(%d, %d)\n", i + 1, matching[i] + 1));
