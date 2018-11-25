@@ -11,9 +11,11 @@ public class BenchmarkRunner {
     public static void main(String[] args) throws RunnerException {
 
         Options options = new OptionsBuilder()
-                //.include(BenchmarkRandom10.class.getSimpleName())
-                //.include(BenchmarkRandom100.class.getSimpleName())
+                .include(BenchmarkWorst8.class.getSimpleName())
+                .include(BenchmarkRandom10.class.getSimpleName())
+                .include(BenchmarkRandom100.class.getSimpleName())
                 .include(BenchmarkRandom200.class.getSimpleName())
+                .include(BenchmarkRandom1000.class.getSimpleName())
                 .timeout(TimeValue.minutes(1))
                 .warmupIterations(3)
                 .forks(1)
