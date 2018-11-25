@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,10 +11,11 @@ import java.util.stream.Stream;
 
 public class FileInputOutputHelper
 {
-    public class preferenceInfo
+    public class PreferenceInfo
     {
         String m_name;
-        int m_prefListIndex;
+        int m_Index;
+        HashMap<String, Integer> m_prefNameToIndexHashMap;
     }
 
     public class FileParsedInfo
@@ -24,8 +26,8 @@ public class FileInputOutputHelper
         int[][] men_pref;
         int[][] women_pref;
 
-        preferenceInfo[][] men_pref_with_details;
-        preferenceInfo[][] women_pref_with_details;
+        HashMap<String, PreferenceInfo> men_pref_with_details_HashMap;
+        HashMap<String, PreferenceInfo> women_pref_with_details_HashMap;
 
         // Default constructor will contain debug pref lists
         public FileParsedInfo()
@@ -41,6 +43,47 @@ public class FileInputOutputHelper
 
             men_pref = new int[][]{ {3, 2, 1, 4}, {3, 1, 2, 4}, {4, 3, 1, 2}, {2, 4, 3, 1}};
             women_pref = new int[][]{ {1, 3, 2, 4}, {4, 1, 3, 2}, {4, 3, 1, 2}, {2, 4, 3, 1}};
+
+            men_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+            women_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+
+            for(int i = 0; i < men_pref.length; ++i)
+            {
+                PreferenceInfo prefInfo = new PreferenceInfo();
+                prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
+
+                for(int j = 0; j < men_pref[0].length; ++j)
+                {
+                    // Pref number is already 1-based
+                    String womanName = "w" + men_pref[i][j];
+                    prefInfo.m_prefNameToIndexHashMap.put(womanName, j);
+                }
+
+                // Naming is 1-based and indexing is 0-based
+                String manName = "m" + Integer.toString(i + 1);
+                prefInfo.m_name = manName;
+                prefInfo.m_Index = i;
+                men_pref_with_details_HashMap.put(manName, prefInfo);
+            }
+
+            for(int i = 0; i < women_pref.length; ++i)
+            {
+                PreferenceInfo prefInfo = new PreferenceInfo();
+                prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
+
+                for(int j = 0; j < women_pref[0].length; ++j)
+                {
+                    // Pref number is already 1-based
+                    String manName = "m" + women_pref[i][j];
+                    prefInfo.m_prefNameToIndexHashMap.put(manName, j);
+                }
+
+                // Naming is 1-based and indexing is 0-based
+                String womanName = "w" + Integer.toString(i + 1);
+                prefInfo.m_name = womanName;
+                prefInfo.m_Index = i;
+                women_pref_with_details_HashMap.put(womanName, prefInfo);
+            }
         }
     };
 
@@ -82,6 +125,10 @@ public class FileInputOutputHelper
 
             parsedInfo.men_pref = new int[parsedInfo.count][parsedInfo.count];
             parsedInfo.women_pref = new int[parsedInfo.count][parsedInfo.count];
+
+            parsedInfo.men_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+            parsedInfo.women_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+
             //int lineIndex = 0;
             for (int lineIndex = 0; lineIndex < (2 * parsedInfo.count); ++lineIndex)
             {
@@ -89,21 +136,46 @@ public class FileInputOutputHelper
 
                 if(lineIndex < parsedInfo.count)
                 {
+                    PreferenceInfo prefInfo = new PreferenceInfo();
+                    prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
                     // populate men data set
                     for (int numberIndexInLine = 0; numberIndexInLine < parsedInfo.count; ++numberIndexInLine)
                     {
                         parsedInfo.men_pref[lineIndex % parsedInfo.count][numberIndexInLine] =
                                 Integer.parseInt(numberInLineArray[numberIndexInLine]);
+
+                        // Pref number is already 1-based
+                        String womanName = "w" + numberInLineArray[numberIndexInLine];
+                        prefInfo.m_prefNameToIndexHashMap.put(womanName, numberIndexInLine);
+
                     }
+
+                    // Naming is 1-based and indexing is 0-based
+                    String manName = "m" + Integer.toString((lineIndex % parsedInfo.count) + 1);
+                    prefInfo.m_name = manName;
+                    prefInfo.m_Index = (lineIndex % parsedInfo.count);
+                    parsedInfo.men_pref_with_details_HashMap.put(manName, prefInfo);
                 }
                 else
                 {
+                    PreferenceInfo prefInfo = new PreferenceInfo();
+                    prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
                     // populate women data set
                     for (int numberIndexInLine = 0; numberIndexInLine < parsedInfo.count; ++numberIndexInLine)
                     {
                         parsedInfo.women_pref[lineIndex % parsedInfo.count][numberIndexInLine] =
                                 Integer.parseInt(numberInLineArray[numberIndexInLine]);
+
+                        // Pref number is already 1-based
+                        String manName = "m" + numberInLineArray[numberIndexInLine];
+                        prefInfo.m_prefNameToIndexHashMap.put(manName, numberIndexInLine);
                     }
+
+                    // Naming is 1-based and indexing is 0-based
+                    String womanName = "w" + Integer.toString((lineIndex % parsedInfo.count) + 1);
+                    prefInfo.m_name = womanName;
+                    prefInfo.m_Index = (lineIndex % parsedInfo.count);
+                    parsedInfo.women_pref_with_details_HashMap.put(womanName, prefInfo);
                 }
             }
         }

@@ -4,22 +4,53 @@
  * S. S. TSENG and R. C. T. LEE - 1984
  */
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import javafx.util.Pair;
+
+import java.util.*;
 import java.util.concurrent.*;
 
 public class SMPDivideAndConquer
 {
     private int[][] m_optimalPrefList;
     private int[][] m_otherPrefList;
+    private MatchingPair[] m_matchingPairList;
+
+    private String m_optimalGenderPrefix;
+    private String m_otherGenderPrefix;
+
+    HashMap<String, FileInputOutputHelper.PreferenceInfo> m_optimalPrefWithDetailsHashMap;
+    HashMap<String, FileInputOutputHelper.PreferenceInfo> m_otherPrefWithDetailsHashMap;
+
     //private ConcurrentLinkedQueue<int[]> m_resultsConcurrentQueue;
 
-    public SMPDivideAndConquer(int[][] optimalPrefList, int[][] otherPrefList)
+    public SMPDivideAndConquer(FileInputOutputHelper.FileParsedInfo parsedInfo)
     {
-        m_optimalPrefList = optimalPrefList;
-        m_otherPrefList = otherPrefList;
+        //System.out.println("Optimality: " + parsedInfo.optimality);
+
+        if(0 == parsedInfo.optimality.compareToIgnoreCase("m"))
+        {
+            //System.out.println("Man Optimal");
+            m_optimalPrefList = parsedInfo.men_pref;
+            m_otherPrefList = parsedInfo.women_pref;
+
+            m_optimalPrefWithDetailsHashMap = parsedInfo.men_pref_with_details_HashMap;
+            m_otherPrefWithDetailsHashMap = parsedInfo.women_pref_with_details_HashMap;
+
+            m_optimalGenderPrefix = "m";
+            m_otherGenderPrefix = "w";
+        }
+        else
+        {
+            //System.out.println("Woman Optimal");
+            m_optimalPrefList = parsedInfo.women_pref;
+            m_otherPrefList = parsedInfo.men_pref;
+
+            m_optimalPrefWithDetailsHashMap = parsedInfo.women_pref_with_details_HashMap;
+            m_otherPrefWithDetailsHashMap = parsedInfo.men_pref_with_details_HashMap;
+
+            m_optimalGenderPrefix = "w";
+            m_otherGenderPrefix = "m";
+        }
     }
 
     /*
@@ -31,20 +62,115 @@ public class SMPDivideAndConquer
     }
     */
 
-    public int[] getInitialMatching()
+    // TODO: do I need to override lessthan for hashmap to order these properly?
+    public class MatchingPair
+    {
+        public String m_optimalGenderName;
+        public String m_otherGenderName;
+
+        //public int m_optimalGenderIndex;
+        //public int m_otherGenderIndex;
+
+        /*
+        public MatchingPair(String optimalGendername, int optimalGenderIndex, String otherGenderName, int otherGenderIndex)
+        {
+            m_optimalGenderName   = optimalGendername;
+            m_otherGenderName = otherGenderName;
+            m_optimalGenderIndex = optimalGenderIndex;
+            m_otherGenderIndex = otherGenderIndex;
+        }
+        */
+
+        public MatchingPair(String optimalGendername, String otherGenderName)
+        {
+            m_optimalGenderName   = optimalGendername;
+            m_otherGenderName = otherGenderName;
+            //m_optimalGenderIndex = optimalGenderIndex;
+            //m_otherGenderIndex = otherGenderIndex;
+        }
+
+        // Default constructor
+        public MatchingPair()
+        {
+            m_optimalGenderName = "";
+            m_otherGenderName = "";
+            //m_optimalGenderIndex = optimalGenderIndex;
+            //m_otherGenderIndex = otherGenderIndex;
+        }
+
+        public String first()
+        {
+            return m_optimalGenderName;
+        }
+
+        public String second()
+        {
+            return m_otherGenderName;
+        }
+
+        /*
+        public String first()
+        {
+            return getOptimalGenderName();
+        }
+
+        public String second()
+        {
+            return getOtherGenderName();
+        }
+
+
+        public String getOptimalGenderName()
+        {
+            return m_optimalGenderName;
+        }
+
+        public void setOptimalGenderName(String m_optimalGenderName)
+        {
+            this.m_optimalGenderName = m_optimalGenderName;
+        }
+
+        public String getOtherGenderName()
+        {
+            return m_otherGenderName;
+        }
+
+        public void setOtherGenderName(String m_otherGenderName)
+        {
+            this.m_otherGenderName = m_otherGenderName;
+        }
+        */
+    }
+
+    public MatchingPair[] getInitialMatching()
     {
         // Here, we just match every optimal gender with their first preference
         int[] initialMatching = new int[m_optimalPrefList.length];
 
+        m_matchingPairList = new MatchingPair[m_optimalPrefList.length];
+
         for(int i = 0; i < initialMatching.length; ++i)
         {
             initialMatching[i] = m_optimalPrefList[i][0];
+            String optimalGenderName = m_optimalGenderPrefix + (i + 1);
+            String otherGenderName = m_otherGenderPrefix + m_optimalPrefList[i][0];
+            int optimalGenderIndex = i;
+            int otherGenderIndex = 0;
+            /*
+            m_matchingPairList[i] = new MatchingPair(
+                    optimalGenderName,
+                    optimalGenderIndex,
+                    otherGenderName,
+                    otherGenderIndex);
+                    */
+
+            m_matchingPairList[i] = new MatchingPair(optimalGenderName, otherGenderName);
         }
 
-        System.out.println("Initial Matching");
-        System.out.println(matchingArrayToString(initialMatching));
+        //System.out.println("Initial Matching");
+        //System.out.println(matchingArrayToString(m_matchingPairList));
 
-        return initialMatching;
+        return m_matchingPairList;
     }
 
     /*
@@ -74,10 +200,10 @@ public class SMPDivideAndConquer
     */
 
     // From https://gist.github.com/lesleh/7724554
-    public static int[][] chunkArray(int[] array, int chunkSize)
+    public static MatchingPair[][] chunkArray(MatchingPair[] array, int chunkSize)
     {
         //int numOfChunks = (int)Math.ceil((double)array.length / chunkSize);
-        int[][] output = new int[array.length][1];
+        MatchingPair[][] output = new MatchingPair[array.length][1];
 
         for(int i = 0; i < array.length; ++i)
         {
@@ -97,57 +223,90 @@ public class SMPDivideAndConquer
         }
         */
 
+        /*
         for(int i = 0; i < output.length; ++i)
         {
             System.out.println("Chuncks");
             System.out.println(matchingArrayToString(output[i]));
         }
+        */
 
         return output;
     }
 
-    public static int [] concatenate1DArray(int[] a, int[] b)
+    public static MatchingPair[] concatenate1DArray(MatchingPair[] a, MatchingPair[] b)
     {
         int aLen = a.length;
         int bLen = b.length;
 
-        int[] c = new int[aLen + bLen];
+        MatchingPair[] c = new MatchingPair[aLen + bLen];
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
         return c;
     }
 
-    public static String matchingArrayToString(int arr[])
+    public static String matchingArrayToString(MatchingPair[] arr)
     {
         String matches = "";
 
         // This is assuming data is arranged in order which they should be.
         for(int i = 0; i < arr.length; ++i)
         {
-            Integer currentOptimalGenderIndex = i + 1;
-            matches += "(" + currentOptimalGenderIndex;
-            matches += "," + arr[i];
+            matches += "(" + arr[i].m_optimalGenderName;
+            matches += "," + arr[i].m_otherGenderName;
             matches += ")\n";
         }
 
         return matches;
     }
 
+    public static String FinalMatchingArrayToString(MatchingPair[] arr)
+    {
+        String matches = "";
+
+        // Order results. This should not be part of the benchmarking since it is just
+        // how the matching is returned to user
+        HashMap<Integer, Integer> OrderedMatchingInteger = new HashMap<Integer, Integer>();
+
+        // This is assuming data is arranged in order which they should be.
+        for(int i = 0; i < arr.length; ++i)
+        {
+            // use .substring(1) to remove first non-digit characters i.e. just leave the integers
+            OrderedMatchingInteger.put(
+                    SMPDivideAndConquer.getNumberFromString(arr[i].m_optimalGenderName),
+                    SMPDivideAndConquer.getNumberFromString(arr[i].m_otherGenderName));
+        }
+
+        for(Integer optimalGender : OrderedMatchingInteger.keySet())
+        {
+            // use .substring(1) to remove first non-digit characters i.e. just leave the integers
+            matches += "(" + optimalGender;
+            matches += "," + OrderedMatchingInteger.get(optimalGender);
+            matches += ")\n";
+        }
+
+        return matches;
+    }
+
+    public static int getNumberFromString(String str)
+    {
+        return Integer.parseInt(str.substring(1));
+    }
+
     class WorkerThread implements /*Runnable,*/ Callable<WorkerThread.Result>
     {
-        private int[] m_leftMatching;
-        private int[] m_rightMatching;
-        private int[] m_finalMatching;
-        private int m_optimalGenderOffsetIndex;
+        private MatchingPair[] m_leftMatching;
+        private MatchingPair[] m_rightMatching;
+        private MatchingPair[] m_finalMatching;
 
         class Result
         {
-            int[] m_finalMatching;
-            int m_optimalGenderOffsetIndex;
+            MatchingPair[] m_finalMatching;
         }
 
-        public WorkerThread(int[] leftMatching, int[] rightMatching, int optimalGenderOffsetIndex)
+        public WorkerThread(MatchingPair[] leftMatching, MatchingPair[] rightMatching)
         {
+            /*
             if(0 == leftMatching.length || 0 == rightMatching.length)
             {
                 System.out.println("Left and Right Matching Sizes Don't Match!");
@@ -158,10 +317,10 @@ public class SMPDivideAndConquer
                 System.out.println("Left and Right Matching Sizes Don't Match!");
                 System.exit(-100);
             }
+            */
 
             m_leftMatching = leftMatching.clone();
             m_rightMatching = rightMatching.clone();
-            m_optimalGenderOffsetIndex = optimalGenderOffsetIndex;
         }
 
         /*
@@ -182,10 +341,8 @@ public class SMPDivideAndConquer
             matchAndAdvanceConflictsIfFound();
             Result result = new Result();
             result.m_finalMatching = m_finalMatching;
-            result.m_optimalGenderOffsetIndex = m_optimalGenderOffsetIndex;
             return result;
         }
-
 
         public void matchAndAdvanceConflictsIfFound()
         {
@@ -199,10 +356,13 @@ public class SMPDivideAndConquer
             //               \ /
             //       (M1, W3),(M2, W1) where w1 is next on M2 preference list
 
-            int[] concatenatedMatchingArray = concatenate1DArray(m_leftMatching, m_rightMatching);
-            m_finalMatching = new int[concatenatedMatchingArray.length];
+            MatchingPair[] concatenatedMatchingArray = concatenate1DArray(m_leftMatching, m_rightMatching);
+            m_finalMatching = Arrays.copyOf(concatenatedMatchingArray, concatenatedMatchingArray.length);
 
-            HashMap<Integer, Integer> alreadyMatched = new HashMap<Integer, Integer>();
+            // Key is other gender
+            HashMap<String, String> alreadyOtherGenderMatched = new HashMap<String, String>();
+
+            HashMap<String, String> alreadyOptimalMatched = new HashMap<String, String>();
 
             for(int matchingIndex = 0; matchingIndex < concatenatedMatchingArray.length; ++matchingIndex)
             {
@@ -214,14 +374,48 @@ public class SMPDivideAndConquer
                 }
                 */
 
-                int currentOtherGenderMatching = concatenatedMatchingArray[matchingIndex];
+                MatchingPair currentMatchingPair = concatenatedMatchingArray[matchingIndex];
 
-                if(alreadyMatched.containsKey(concatenatedMatchingArray[matchingIndex]))
+                if(alreadyOtherGenderMatched.containsKey(currentMatchingPair.second()))
                 {
-                    int rejectedIndex = -1;
-                    while(alreadyMatched.containsKey(currentOtherGenderMatching))
+                    while(alreadyOtherGenderMatched.containsKey(currentMatchingPair.second()))
                     {
-                        int optimalGenderMatchedToOtherGender = alreadyMatched.get(concatenatedMatchingArray[matchingIndex]);
+                        String otherGender = currentMatchingPair.second();
+                        String optimalMatched = alreadyOtherGenderMatched.get(otherGender);
+                        String optimalProposing = currentMatchingPair.first();
+
+                        String mostPreferredOptimal = getMostPreferredOptimalGender(otherGender, optimalMatched, optimalProposing);
+
+                        if(0 == mostPreferredOptimal.compareToIgnoreCase(optimalMatched))
+                        {
+                            // Keep current matching, advance conflicting optimal gender to his next
+                            // preferred other gender
+                            String nextPreferredOtherGender = getNextPreference(optimalProposing, otherGender);
+
+                            currentMatchingPair.m_otherGenderName = nextPreferredOtherGender;
+                        }
+                        else
+                        {
+                            // This means that we need to reject already matched and match
+                            // the more preferred
+                            alreadyOtherGenderMatched.put(currentMatchingPair.second(), optimalProposing);
+                            alreadyOptimalMatched.put(optimalProposing, currentMatchingPair.second());
+                            /*
+                            alreadyOptimalMatchedInteger.put(
+                                    SMPDivideAndConquer.getNumberFromString(optimalProposing),
+                                    SMPDivideAndConquer.getNumberFromString(currentMatchingPair.second()));
+                                    */
+
+                            // Advance conflicting optimal gender to his next
+                            // preferred other gender
+                            String nextPreferredOtherGender = getNextPreference(optimalMatched, otherGender);
+
+                            currentMatchingPair.m_optimalGenderName = optimalMatched;
+                            currentMatchingPair.m_otherGenderName = nextPreferredOtherGender;
+                        }
+
+                        /*
+                        int optimalGenderMatchedToOtherGender = alreadyOtherGenderMatched.get(concatenatedMatchingArray[matchingIndex]);
                         int mostPreferredOptimalGenderToOtherGender =
                                 getMostPreferredOptimalGender(
                                         concatenatedMatchingArray[matchingIndex],
@@ -234,9 +428,9 @@ public class SMPDivideAndConquer
                             // This means that we need to reject already matched and match
                             // the more preferred
                             //rejectedIndex = optimalGenderMatchedToOtherGender;
-                            //alreadyMatched.remove(currentOtherGenderMatching);
+                            //alreadyOtherGenderMatched.remove(currentOtherGenderMatching);
 
-                            alreadyMatched.put(
+                            alreadyOtherGenderMatched.put(
                                     concatenatedMatchingArray[matchingIndex],
                                     mostPreferredOptimalGenderToOtherGender);
                             //m_finalMatching[matchingIndex] = concatenatedMatchingArray[matchingIndex];
@@ -244,7 +438,7 @@ public class SMPDivideAndConquer
                             currentOtherGenderMatching =
                                     getNextPreference(optimalGenderMatchedToOtherGender, concatenatedMatchingArray[matchingIndex]);
 
-                            alreadyMatched.put(
+                            alreadyOtherGenderMatched.put(
                                     optimalGenderMatchedToOtherGender,
                                     currentOtherGenderMatching);
 
@@ -259,6 +453,7 @@ public class SMPDivideAndConquer
                             currentOtherGenderMatching =
                                     getNextPreference(matchingIndex, concatenatedMatchingArray[matchingIndex]);
                         }
+                        */
 
                         // Now find the next most preferred other gender for rejected optimal person
                         //currentOtherGenderMatching =
@@ -267,28 +462,57 @@ public class SMPDivideAndConquer
                         //                (rejectedIndex == -1) ? concatenatedMatchingArray[matchingIndex] : rejectedIndex);
                     } // while
                 } // if
+
+                alreadyOtherGenderMatched.put(currentMatchingPair.second(), currentMatchingPair.first());
+                alreadyOptimalMatched.put(currentMatchingPair.first(), currentMatchingPair.second());
+                /*
+                alreadyOptimalMatchedInteger.put(
+                        SMPDivideAndConquer.getNumberFromString(currentMatchingPair.first()),
+                        SMPDivideAndConquer.getNumberFromString(currentMatchingPair.second()));
+                        */
+
+                /*
                 else
                 {
                     // Key is other gender and value is optimal gender
-                    alreadyMatched.put(currentOtherGenderMatching, matchingIndex);
+                    alreadyOtherGenderMatched.put(currentMatchingPair.second(), currentMatchingPair.first());
                     //m_finalMatching[matchingIndex] = currentOtherGenderMatching;
                 }
+                */
             } // for
 
             // TODO: find better way!
             int i = 0;
-            for (Integer otherGender: alreadyMatched.keySet())
+            for (String optimalGender: alreadyOptimalMatched.keySet())
             {
-                m_finalMatching[i] = alreadyMatched.get(otherGender);
+                m_finalMatching[i].m_optimalGenderName = optimalGender;
+                m_finalMatching[i].m_otherGenderName = alreadyOptimalMatched.get(optimalGender);
                 ++i;
             }
 
-            Arrays.sort(m_finalMatching);
-
+            //Arrays.sort(m_finalMatching);
         }
 
-        int getMostPreferredOptimalGender(int otherGender, int matchedOptimalIndex, int proposingOptimalIndex)
+        String getMostPreferredOptimalGender(String otherGender, String matchedOptimalName, String proposingOptimalName)
         {
+            FileInputOutputHelper.PreferenceInfo prefInfo = m_otherPrefWithDetailsHashMap.get(otherGender);
+            int matchedOptimalPrefIndex = prefInfo.m_prefNameToIndexHashMap.get(matchedOptimalName);
+            int proposingOptimalPrefIndex = prefInfo.m_prefNameToIndexHashMap.get(proposingOptimalName);
+
+            if(matchedOptimalPrefIndex == proposingOptimalPrefIndex)
+            {
+                System.out.println("Both Optimal Genders Have Same Index!");
+                System.exit(-100);
+            }
+            if(matchedOptimalPrefIndex < proposingOptimalPrefIndex)
+            {
+                return matchedOptimalName;
+            }
+            else
+            {
+                return proposingOptimalName;
+            }
+            /*
             // m_optimalGenderStartIndex is needed to know where to look in the preference list since
             // matching are split into different subsets. Also, this does not require us to make any
             // unnecessary copies.
@@ -314,10 +538,30 @@ public class SMPDivideAndConquer
             {
                 return proposingOptimalPref;
             }
+            */
         }
 
-        int getNextPreference(int optimalToAdvance, int currentOtherGender)
+        String getNextPreference(String optimalToAdvance, String otherGenderWhoRejected)
         {
+            FileInputOutputHelper.PreferenceInfo prefInfo = m_optimalPrefWithDetailsHashMap.get(optimalToAdvance);
+
+            int otherGenderIndex = prefInfo.m_prefNameToIndexHashMap.get(otherGenderWhoRejected);
+            int otherNextPreferredGenderIndex = otherGenderIndex + 1;
+
+            int optimalGenderIndex = prefInfo.m_Index;
+
+            if(otherNextPreferredGenderIndex > (m_optimalPrefList[optimalGenderIndex].length - 1))
+            {
+                System.out.println("Index of next preference other gender is out of bounds!");
+                System.exit(-100);
+            }
+
+            String nextOtherGenderPrefName =
+                    m_otherGenderPrefix + m_optimalPrefList[optimalGenderIndex][otherNextPreferredGenderIndex];
+
+            return nextOtherGenderPrefName;
+
+            /*
             // m_optimalGenderStartIndex is needed to know where to look in the preference list since
             // matching are split into different subsets. Also, this does not require us to make any
             // unnecessary copies.
@@ -326,6 +570,7 @@ public class SMPDivideAndConquer
             int nextPref = m_optimalPrefList[actualOptimalIndex][actualOtherGenderIndex + 1];
 
             return nextPref;
+            */
         }
 
         // TODO: maybe getting this information can be done in a smarter way?
@@ -359,15 +604,17 @@ public class SMPDivideAndConquer
             return index;
         }
 
-        public int[] getFinalMatching()
+        public MatchingPair[] getFinalMatching()
         {
             return m_finalMatching;
         }
 
+        /*
         public int getOptimalGenderOffsetIndex()
         {
             return m_optimalGenderOffsetIndex;
         }
+        */
 
         public String finalMatchingToString()
         {
@@ -432,22 +679,24 @@ public class SMPDivideAndConquer
 
     public String run()
     {
-        int[] initialMatching = getInitialMatching();
+        MatchingPair[] initialMatchingList = getInitialMatching();
 
+        /*
         // for now only allow even number of data
-        if(0 != initialMatching.length % 2)
+        if(0 != initialMatchingList.length % 2)
         {
             System.out.println("Data size must be even!");
             System.exit(-100);
         }
+        */
 
         // initially, kChunckSize would be the size of individual matching
         //final int kChunckSize = initialMatching.length;
         final int kChunckSize = 1;
 
-        int[][] arrayChuncks = SMPDivideAndConquer.chunkArray(initialMatching, kChunckSize);
+        MatchingPair[][] arrayChuncks = SMPDivideAndConquer.chunkArray(initialMatchingList, kChunckSize);
 
-        int matchingResultSize = initialMatching.length;
+        int matchingResultSize = initialMatchingList.length;
 
         String finalMatchingString = "";
 
@@ -459,12 +708,12 @@ public class SMPDivideAndConquer
             List<Callable<WorkerThread.Result>> callables = new ArrayList<Callable<WorkerThread.Result>>();
             // increment by 2 since we are processing two chuncks at a time
 
-            for(int i = 0; i < matchingResultSize; i = (i+2))
+            for(int i = 0; i < (matchingResultSize - 1); i = (i+2))
             {
                 // TODO: I want results to be added to queue in right order
                 //pool.submit(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1], i));
                 int indexOffset = arrayChuncks[0].length * i;
-                callables.add(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1], indexOffset));
+                callables.add(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1]));
             }
 
             try
@@ -472,9 +721,20 @@ public class SMPDivideAndConquer
                 // There is a hard requirement that results are in order
                 List<Future<WorkerThread.Result>> results = pool.invokeAll(callables);
 
-                matchingResultSize = results.size();
+                final boolean kOddNumberOfChuncks = (0 != matchingResultSize % 2) && (1 != matchingResultSize);
+                MatchingPair[] leftOverChunck = new MatchingPair[1];
 
-                arrayChuncks = new int[matchingResultSize][results.get(0).get().m_finalMatching.length];
+                if(kOddNumberOfChuncks)
+                {
+                    leftOverChunck =
+                            Arrays.copyOf(arrayChuncks[matchingResultSize - 1], arrayChuncks[matchingResultSize - 1].length);
+                }
+
+
+                matchingResultSize = kOddNumberOfChuncks ? (results.size() + 1) : results.size();
+
+                //arrayChuncks = Arrays.copyOf(concatenatedMatchingArray, concatenatedMatchingArray.length);
+                arrayChuncks = new MatchingPair[matchingResultSize][];
 
                 //for(Future<int[]> result: results)
                 //{
@@ -488,16 +748,21 @@ public class SMPDivideAndConquer
                 {
                     // copy result into arrayChuncks so we can iterate again
                     //arrayChuncks[result.get().m_optimalGenderOffsetIndex] = result.get().m_finalMatching;
-                    arrayChuncks[i] = result.get().m_finalMatching;
+                    arrayChuncks[i] = Arrays.copyOf(result.get().m_finalMatching, result.get().m_finalMatching.length);
 
-                    System.out.println("Results #"+ i);
-                    System.out.println(SMPDivideAndConquer.matchingArrayToString(result.get().m_finalMatching));
+                    //System.out.println("Results #"+ i);
+                    //System.out.println(SMPDivideAndConquer.matchingArrayToString(result.get().m_finalMatching));
                     ++i;
+                }
+
+                if(kOddNumberOfChuncks)
+                {
+                    arrayChuncks[i] = Arrays.copyOf(leftOverChunck, leftOverChunck.length);
                 }
 
                 if(1 == matchingResultSize)
                 {
-                    finalMatchingString = matchingArrayToString(arrayChuncks[0]);
+                    finalMatchingString = FinalMatchingArrayToString(arrayChuncks[0]);
                 }
             }
             catch (InterruptedException ex)
@@ -552,18 +817,29 @@ public class SMPDivideAndConquer
     public static void main(String[] args)
     {
 
-        //FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
-        //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(args);
-
+        // Log Start Time
+        final long startTime = System.nanoTime();
 
         FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
-        FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.getDefaultInfo();
+
+        FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(args);
+
+
+        //FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
+        //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.getDefaultInfo();
+
+        //String[] customArgs = new String[2];
+        //customArgs[0] = "out\\production\\StableMatchingParallel\\Random_200.txt";
+        //customArgs[1] = "w";
+
+        //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(customArgs);
 
         int[][] optimalGenderPrefList;
         int[][] otherGenderPrefList;
 
-        SMPDivideAndConquer smpDivideAndConquer;
+        SMPDivideAndConquer smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo);
 
+        /*
         if(0 == parsedInfo.optimality.compareToIgnoreCase("m"))
         {
             smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo.men_pref, parsedInfo.women_pref);
@@ -572,9 +848,15 @@ public class SMPDivideAndConquer
         {
             smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo.women_pref, parsedInfo.men_pref);
         }
+        */
 
         final String kFinalMatchingString = smpDivideAndConquer.run();
         System.out.println(kFinalMatchingString);
+
+        // Log End Time
+        final long endTime = System.nanoTime();
+        final long totalTime = endTime - startTime;
+        System.out.println("Total time taken for <SMPDivideAndConquer> is "+ totalTime);
 
         /*
         (1,3)
