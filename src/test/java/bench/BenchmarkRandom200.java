@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkRandom10 {
+public class BenchmarkRandom200 {
 
     private static SMPData data;
 
     static {
-        data = SMPData.loadFromFile("testCases/Random_10.txt");
+        data = SMPData.loadFromFile("testCases/Random_200.txt");
     }
 
     @Benchmark

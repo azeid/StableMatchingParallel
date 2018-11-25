@@ -11,6 +11,9 @@ public class BenchmarkRunner {
 
         Options options = new OptionsBuilder()
                 .include(BenchmarkRandom10.class.getSimpleName())
+                .include(BenchmarkRandom100.class.getSimpleName())
+                .include(BenchmarkRandom200.class.getSimpleName())
+                .warmupIterations(3)
                 .forks(1)
                 .build();
 
