@@ -20,8 +20,19 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <jmh.version>1.21</jmh.version>
+
+        <esoco.common.version>1.2.0</esoco.common.version>
+        <esoco.objectrelations.version>1.3.0</esoco.objectrelations.version>
+        <esoco.coroutines.version>0.9.0</esoco.coroutines.version>
     </properties>
 
     <dependencies>
@@ -34,6 +45,21 @@
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>${jmh.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.esoco</groupId>
+            <artifactId>coroutines</artifactId>
+            <version>${esoco.coroutines.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.obrel</groupId>
+            <artifactId>objectrelations</artifactId>
+            <version>${esoco.objectrelations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.esoco</groupId>
+            <artifactId>esoco-common</artifactId>
+            <version>${esoco.common.version}</version>
         </dependency>
     </dependencies>
 

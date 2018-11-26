@@ -1,11 +1,23 @@
+import de.esoco.coroutine.Continuation;
+import static de.esoco.coroutine.Coroutine.*;
+
+import de.esoco.coroutine.Coroutine;
+import de.esoco.coroutine.CoroutineScope;
+import static de.esoco.coroutine.step.CodeExecution.*;
 import smp.SMPData;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /*
 * Inspired by
@@ -151,44 +163,102 @@ public class SMPCoroutines {
     }
 
     public String run() {
-        int count = prefGenderA.length;
-        Man[] menList = new Man[count];
-        Woman[] womenList = new Woman[count];
+//        int count = prefGenderA.length;
+//        Man[] menList = new Man[count];
+//        Woman[] womenList = new Woman[count];
+//
+//        for (int i = 0; i < count; i++) {
+//            menList[i] = new Man(i, prefGenderA[i]);
+//            menList[i].setWomenList(womenList);
+//
+//            womenList[i] = new Woman(i, prefGenderB[i]);
+//            womenList[i].setMenList(menList);
+//        }
+//
+//        ExecutorService pool = Executors.newWorkStealingPool(count * 2);
+//        ArrayList<Future> waitForIt = new ArrayList<>();
+//        for (Woman w : womenList) {
+//            waitForIt.add(pool.submit(w));
+//        }
+//
+//        for (Man m : menList) {
+//            waitForIt.add(pool.submit(m));
+//        }
+//
+//        for (Future f : waitForIt) {
+//            try {
+//                f.get();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        StringBuilder sb = new StringBuilder();
+//        for (Woman w : womenList) {
+//            sb.append(String.format("(%d,%d)\n", w.acceptedMan + 1, w.id + 1));
+//        }
+//
+//        return sb.toString();
 
-        for (int i = 0; i < count; i++) {
-            menList[i] = new Man(i, prefGenderA[i]);
-            menList[i].setWomenList(womenList);
 
-            womenList[i] = new Woman(i, prefGenderB[i]);
-            womenList[i].setMenList(menList);
-        }
+//        int count = prefGenderA.length;
+//        int[] matching = new int[count];
+//        Arrays.fill(matching, -1);
+//
+//        for (int i = 0; i < count; i++) {
+//            completedFuture(i).thenApply(manId -> {
+//                for (int proposed = 0; proposed < count; proposed++) {
+//                    CompletableFuture<Integer>  proposeFuture =  CompletableFuture.completedFuture(prefGenderA[manId][proposed]);
+//
+//                    proposeFuture.thenApply(womenId -> {
+//                        if (matching[womenId] < 0) {
+//                            matching[womenId] = manId;
+//                        } else {
+//                            int rankAccepted = -1;
+//                            int rankProposed = -1;
+//                            for (int j = 0; j < prefGenderB.length; j++) {
+//                                int manIndex = prefGenderB[womenId][j] - 1;
+//                                if (manIndex == manId) {
+//                                    rankProposed = j;
+//                                }
+//
+//                                if (manIndex == matching[womenId]) {
+//                                    rankAccepted = j;
+//                                }
+//                            }
+//
+//                            if (rankProposed < rankAccepted) {
+//
+//                            }
+//                        }
+//                    });
+//                }
+//            })
+//        }
 
-        ExecutorService pool = Executors.newWorkStealingPool(count * 2);
-        ArrayList<Future> waitForIt = new ArrayList<>();
-        for (Woman w : womenList) {
-            waitForIt.add(pool.submit(w));
-        }
+        Coroutine<String, Integer> parseInteger =
+                first(apply(String::trim))
+                        .then(apply(s -> Integer.valueOf(s)));
 
-        for (Man m : menList) {
-            waitForIt.add(pool.submit(m));
-        }
+        Coroutine<Integer, ?> manCoroutine =
+                Coroutine.first(apply((Integer manId) -> prefGenderA[manId]))
+                        .then(apply((int[] manPref) -> Arrays.toString(manPref)))
+                        .then(consume(preferences -> System.out.println(preferences)));
 
-        for (Future f : waitForIt) {
-            try {
-                f.get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
+        CoroutineScope.launch(scope -> {
 
-        StringBuilder sb = new StringBuilder();
-        for (Woman w : womenList) {
-            sb.append(String.format("(%d,%d)\n", w.acceptedMan + 1, w.id + 1));
-        }
+            List<Continuation<?>> all = IntStream.range(0, prefGenderA.length)
+                    .mapToObj(manIndex -> manCoroutine.runAsync(scope, manIndex)).collect(Collectors.toList());
 
-        return sb.toString();
+        });
+
+
+
+
+
+        return "";
     }
 
 
