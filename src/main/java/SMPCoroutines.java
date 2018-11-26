@@ -1,10 +1,11 @@
+import smp.SMPData;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
 * Inspired by
@@ -18,11 +19,13 @@ public class SMPCoroutines {
         private int[] preferences;
         private int currentProposed;
         private Woman[] womenList;
+        private Semaphore sem;
 
         public Man(int id, int[] preferences) {
             currentProposed = -1;
             this.id = id;
             this.preferences = preferences;
+            sem = new Semaphore(0);
         }
 
         public void setWomenList(Woman[] womenList) {
@@ -31,20 +34,23 @@ public class SMPCoroutines {
 
         @Override
         public void run() {
-            for (currentProposed = 0; currentProposed < preferences.length; currentProposed++) {
+            for (currentProposed = 0; currentProposed < preferences.length && !allMatched; currentProposed++) {
                    proposeTo(preferences[currentProposed] -1);
+            }
+
+            if (allMatched) {
+                for (Woman w : womenList) {
+                    w.sem.release();
+                }
             }
         }
 
         private void proposeTo(int womanIndex) {
             Woman next = womenList[womanIndex];
-            System.out.printf("Man %d proposed to %d\n", id, womanIndex);
             next.receiveProposal(this.id);
             try {
                 System.out.printf("Man %d waiting for response.\n", id);
-                synchronized (this) {
-                    this.wait();
-                }
+                sem.acquire();
                 System.out.printf("Man %d was rejected :(\n", id);
             } catch (InterruptedException e) {
 
@@ -52,7 +58,6 @@ public class SMPCoroutines {
         }
 
     }
-
 
     class Woman implements Runnable {
         private int id;
@@ -63,6 +68,7 @@ public class SMPCoroutines {
 
         private Semaphore sem;
         private int proposedMan;
+
 
         public Woman(int id, int[] preferences) {
             this.id = id;
@@ -75,47 +81,51 @@ public class SMPCoroutines {
             this.menList = menList;
         }
 
-        public void receiveProposal(int proposingMan) {
-            synchronized (sem) {
-                proposedMan = proposingMan;
-                sem.release();
-            }
+        public synchronized void receiveProposal(int proposingMan) {
+            System.out.printf("Man %d proposed to woman %d\n", proposingMan, id);
+            proposedMan = proposingMan;
+            sem.release();
         }
 
         @Override
         public void run() {
-            while(true) {
+            while(!allMatched) {
                 try {
                     sem.acquire();
-                    if (acceptedMan < 0) {
-                        acceptedMan = proposedMan;
-                        System.out.printf("Woman %d accepted man %d\n", id, acceptedMan);
-                    } else {
-                        int rankAccepted = -1;
-                        int rankProposed = -1;
-                        for (int i = 0; i < preferences.length; i++) {
-                            int manIndex = preferences[i] - 1;
-                            if (manIndex == proposedMan) {
-                                rankProposed = i;
-                            }
-
-                            if (manIndex == acceptedMan) {
-                                rankAccepted = i;
-                            }
-                        }
-
-                        int manToWakeUp;
-                        if (rankProposed < rankAccepted) {
-                            manToWakeUp = acceptedMan;
+                    if (!allMatched) {
+                        if (acceptedMan < 0) {
                             acceptedMan = proposedMan;
-                            System.out.printf("Woman %d accepted man %d, ditching man %d\n", id, proposedMan, manToWakeUp);
+                            System.out.printf("Woman %d accepted man %d\n", id, acceptedMan);
+                            int count = toMatch.decrementAndGet();
+                            allMatched = allMatched || count == 0;
+                            if (allMatched) {
+                                System.out.println("All matched!");
+                            }
                         } else {
-                            manToWakeUp = proposedMan;
-                            System.out.printf("Woman %d rejected man %d, she is already with man %d\n", id, proposedMan, acceptedMan);
-                        }
+                            int rankAccepted = -1;
+                            int rankProposed = -1;
+                            for (int i = 0; i < preferences.length; i++) {
+                                int manIndex = preferences[i] - 1;
+                                if (manIndex == proposedMan) {
+                                    rankProposed = i;
+                                }
 
-                        synchronized (menList[manToWakeUp]) {
-                            menList[manToWakeUp].notifyAll();
+                                if (manIndex == acceptedMan) {
+                                    rankAccepted = i;
+                                }
+                            }
+
+                            int manToWakeUp;
+                            if (rankProposed < rankAccepted) {
+                                manToWakeUp = acceptedMan;
+                                acceptedMan = proposedMan;
+                                System.out.printf("Woman %d accepted man %d, ditching man %d\n", id, proposedMan, manToWakeUp);
+                            } else {
+                                manToWakeUp = proposedMan;
+                                System.out.printf("Woman %d rejected man %d, she is already with man %d\n", id, proposedMan, acceptedMan);
+                            }
+
+                            menList[manToWakeUp].sem.release();
                         }
                     }
 
@@ -123,16 +133,21 @@ public class SMPCoroutines {
                 } catch (InterruptedException e) {
                 }
             }
+
+            menList[acceptedMan].sem.release();
         }
     }
 
 
     private int[][] prefGenderA;
     private int[][] prefGenderB;
+    private AtomicInteger toMatch;
+    private static boolean allMatched = false;
 
     public SMPCoroutines(int[][] prefGenderA, int[][] prefGenderB) {
         this.prefGenderA = prefGenderA;
         this.prefGenderB = prefGenderB;
+        this.toMatch = new AtomicInteger(prefGenderA.length);
     }
 
     public String run() {
@@ -148,43 +163,38 @@ public class SMPCoroutines {
             womenList[i].setMenList(menList);
         }
 
-
-
-        ExecutorService pool = Executors.newFixedThreadPool(count * 2);
-
+        ExecutorService pool = Executors.newWorkStealingPool(count * 2);
+        ArrayList<Future> waitForIt = new ArrayList<>();
         for (Woman w : womenList) {
-            pool.submit(w);
+            waitForIt.add(pool.submit(w));
         }
 
         for (Man m : menList) {
-            pool.submit(m);
+            waitForIt.add(pool.submit(m));
         }
 
-
-        try {
-            if (pool.awaitTermination(10, TimeUnit.SECONDS)) {
-                System.out.println("Everything finished!");
+        for (Future f : waitForIt) {
+            try {
+                f.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
+        StringBuilder sb = new StringBuilder();
+        for (Woman w : womenList) {
+            sb.append(String.format("(%d,%d)\n", w.acceptedMan + 1, w.id + 1));
+        }
 
-        return "";
+        return sb.toString();
     }
 
 
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage:\njava SMPCoroutines <input_file>");
-            return;
-        }
-
-        Scanner input;
-        try {
-            input = new Scanner(new File(args[0]));
-        } catch (FileNotFoundException e) {
-            System.out.printf("File \"%s\" not found.\n", args[0]);
             return;
         }
 
@@ -198,20 +208,9 @@ public class SMPCoroutines {
 //            optimality = args[1];
 //        }
 
-        int n = input.nextInt();
+        SMPData data = SMPData.loadFromFile(args[0]);
 
-        int[][] man_preferences = new int[n][n];
-        int[][] woman_preferences = new int[n][n];
-
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                man_preferences[i][j] = input.nextInt();
-
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                woman_preferences[i][j] = input.nextInt();
-
-        SMPCoroutines smp = new SMPCoroutines(man_preferences, woman_preferences);
+        SMPCoroutines smp = new SMPCoroutines(data.getPreferencesOne(), data.getPreferencesTwo());
         System.out.println(smp.run());
     }
 }
