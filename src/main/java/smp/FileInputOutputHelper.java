@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,30 +33,36 @@ public class FileInputOutputHelper
         // Default constructor will contain debug pref lists
         public FileParsedInfo()
         {
-            count = 4;
-            optimality = "m";
-            outputFile = "default_outputFile.txt";
+        }
+
+        public FileParsedInfo getDefaultInfo()
+        {
+            FileParsedInfo defaultInfo = new FileParsedInfo();
+
+            defaultInfo.count = 4;
+            defaultInfo.optimality = "m";
+            defaultInfo.outputFile = "default_outputFile.txt";
             //men_pref = new int[][]{ {2, 3, 1, 4}, {2, 3, 4, 1}, {3, 2, 4, 1}, {1, 4, 2, 3}};
             //women_pref = new int[][]{ {1, 4, 2, 3}, {1, 4, 3, 2}, {3, 2, 4, 1}, {2, 1, 3, 4}};
 
             //men_pref = new int[][]{ {1, 2, 3, 4}, {2, 1, 4, 3}, {4, 2, 1, 3}, {1, 2, 3, 4}};
             //women_pref = new int[][]{ {2, 3, 1, 4}, {3, 4, 1, 2}, {4, 2, 1, 3}, {4, 2, 3, 1}};
 
-            men_pref = new int[][]{ {3, 2, 1, 4}, {3, 1, 2, 4}, {4, 3, 1, 2}, {2, 4, 3, 1}};
-            women_pref = new int[][]{ {1, 3, 2, 4}, {4, 1, 3, 2}, {4, 3, 1, 2}, {2, 4, 3, 1}};
+            defaultInfo.men_pref = new int[][]{{3, 2, 1, 4}, {3, 1, 2, 4}, {4, 3, 1, 2}, {2, 4, 3, 1}};
+            defaultInfo.women_pref = new int[][]{{1, 3, 2, 4}, {4, 1, 3, 2}, {4, 3, 1, 2}, {2, 4, 3, 1}};
 
-            men_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
-            women_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+            defaultInfo.men_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+            defaultInfo.women_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
 
-            for(int i = 0; i < men_pref.length; ++i)
+            for (int i = 0; i < defaultInfo.men_pref.length; ++i)
             {
                 PreferenceInfo prefInfo = new PreferenceInfo();
                 prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
 
-                for(int j = 0; j < men_pref[0].length; ++j)
+                for (int j = 0; j < defaultInfo.men_pref[0].length; ++j)
                 {
                     // Pref number is already 1-based
-                    String womanName = "w" + men_pref[i][j];
+                    String womanName = "w" + defaultInfo.men_pref[i][j];
                     prefInfo.m_prefNameToIndexHashMap.put(womanName, j);
                 }
 
@@ -63,18 +70,18 @@ public class FileInputOutputHelper
                 String manName = "m" + Integer.toString(i + 1);
                 prefInfo.m_name = manName;
                 prefInfo.m_Index = i;
-                men_pref_with_details_HashMap.put(manName, prefInfo);
+                defaultInfo.men_pref_with_details_HashMap.put(manName, prefInfo);
             }
 
-            for(int i = 0; i < women_pref.length; ++i)
+            for (int i = 0; i < defaultInfo.women_pref.length; ++i)
             {
                 PreferenceInfo prefInfo = new PreferenceInfo();
                 prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
 
-                for(int j = 0; j < women_pref[0].length; ++j)
+                for (int j = 0; j < defaultInfo.women_pref[0].length; ++j)
                 {
                     // Pref number is already 1-based
-                    String manName = "m" + women_pref[i][j];
+                    String manName = "m" + defaultInfo.women_pref[i][j];
                     prefInfo.m_prefNameToIndexHashMap.put(manName, j);
                 }
 
@@ -82,15 +89,11 @@ public class FileInputOutputHelper
                 String womanName = "w" + Integer.toString(i + 1);
                 prefInfo.m_name = womanName;
                 prefInfo.m_Index = i;
-                women_pref_with_details_HashMap.put(womanName, prefInfo);
+                defaultInfo.women_pref_with_details_HashMap.put(womanName, prefInfo);
             }
-        }
-    };
 
-    public FileParsedInfo getDefaultInfo()
-    {
-        FileParsedInfo defaultInfo = new FileParsedInfo();
-        return defaultInfo;
+            return defaultInfo;
+        }
     }
 
     public FileParsedInfo parseInputFile(String[] args)
@@ -108,7 +111,7 @@ public class FileInputOutputHelper
         parsedInfo.optimality = args[1];
         parsedInfo.outputFile = (args.length == 3) ? args[2] : "";
 
-        if (0 != parsedInfo.optimality.compareToIgnoreCase("w") && 0 != parsedInfo.optimality.compareToIgnoreCase("m") )
+        if (0 != parsedInfo.optimality.compareToIgnoreCase("w") && 0 != parsedInfo.optimality.compareToIgnoreCase("m"))
         {
             System.out.println("Invalid Preference Argument: " + parsedInfo.optimality);
             System.exit(-100);
@@ -134,7 +137,7 @@ public class FileInputOutputHelper
             {
                 final String[] numberInLineArray = fileLines.get(lineIndex).split(" ");
 
-                if(lineIndex < parsedInfo.count)
+                if (lineIndex < parsedInfo.count)
                 {
                     PreferenceInfo prefInfo = new PreferenceInfo();
                     prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
@@ -183,6 +186,71 @@ public class FileInputOutputHelper
         {
             System.out.println("Exception While Reading File: " + e.toString());
             System.exit(-100);
+        }
+
+        return parsedInfo;
+    }
+
+    public FileParsedInfo parseInputData(int[][] man_preferences, int[][] women_preferences, int size, String optimality)
+    {
+        FileParsedInfo parsedInfo = new FileParsedInfo();
+
+        parsedInfo.count = size;
+        parsedInfo.optimality = optimality;
+        parsedInfo.outputFile = "";
+
+        if (0 != parsedInfo.optimality.compareToIgnoreCase("w") && 0 != parsedInfo.optimality.compareToIgnoreCase("m"))
+        {
+            System.out.println("Invalid Preference Argument: " + parsedInfo.optimality);
+            System.exit(-100);
+        }
+
+        parsedInfo.men_pref = new int[parsedInfo.count][parsedInfo.count];
+        parsedInfo.women_pref = new int[parsedInfo.count][parsedInfo.count];
+
+        parsedInfo.men_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+        parsedInfo.women_pref_with_details_HashMap = new HashMap<String, PreferenceInfo>();
+
+        for (int i = 0; i < parsedInfo.count; ++i)
+        {
+            PreferenceInfo prefInfo = new PreferenceInfo();
+            prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
+            // populate men data set
+            for (int j = 0; j < parsedInfo.count; ++j)
+            {
+                parsedInfo.men_pref[i][j] = man_preferences[i][j];
+
+                // Pref number is already 1-based
+                String womanName = "w" + man_preferences[i][j];
+                prefInfo.m_prefNameToIndexHashMap.put(womanName, j);
+            }
+
+            // Naming is 1-based and indexing is 0-based
+            String manName = "m" + Integer.toString(i + 1);
+            prefInfo.m_name = manName;
+            prefInfo.m_Index = i;
+            parsedInfo.men_pref_with_details_HashMap.put(manName, prefInfo);
+        }
+
+        for (int i = 0; i < parsedInfo.count; ++i)
+        {
+            PreferenceInfo prefInfo = new PreferenceInfo();
+            prefInfo.m_prefNameToIndexHashMap = new HashMap<String, Integer>();
+            // populate women data set
+            for (int j = 0; j < parsedInfo.count; ++j)
+            {
+                parsedInfo.women_pref[i][j] = women_preferences[i][j];
+
+                // Pref number is already 1-based
+                String manName = "m" + j;
+                prefInfo.m_prefNameToIndexHashMap.put(manName, j);
+            }
+
+            // Naming is 1-based and indexing is 0-based
+            String womanName = "w" + Integer.toString(i + 1);
+            prefInfo.m_name = womanName;
+            prefInfo.m_Index = i;
+            parsedInfo.women_pref_with_details_HashMap.put(womanName, prefInfo);
         }
 
         return parsedInfo;
