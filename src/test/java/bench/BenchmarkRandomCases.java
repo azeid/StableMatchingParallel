@@ -2,6 +2,7 @@ package bench;
 
 import org.openjdk.jmh.annotations.*;
 import smp.SMP;
+import smp.SMPCoroutines;
 import smp.SMPData;
 import smp.SMPProducerConsumer;
 
@@ -35,6 +36,12 @@ public class BenchmarkRandomCases {
     @Benchmark
     public String producerConsumer() {
         SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
+        return smp.run();
+    }
+
+    @Benchmark
+    public String coroutines() {
+        SMPCoroutines smp = new SMPCoroutines(data.getPreferencesOne(), data.getPreferencesTwo());
         return smp.run();
     }
 }
