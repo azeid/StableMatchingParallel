@@ -565,7 +565,7 @@ public class SMPDivideAndConquer
 
         FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
 
-        final boolean kIsDebug = true;
+        final boolean kIsDebug = false;
 
         FileInputOutputHelper.FileParsedInfo parsedInfo;
 
