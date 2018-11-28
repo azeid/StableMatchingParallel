@@ -25,7 +25,6 @@ public class BenchmarkBestCases {
         data = SMPData.loadFromFile(fileName);
     }
 
-    /*
     @Benchmark
     public String serial() {
         return SMP.performSMPAlgorithm(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
@@ -36,28 +35,18 @@ public class BenchmarkBestCases {
         SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
         return smp.run();
     }
-*/
+
     @Benchmark
     public String divideAndConquerRunnable() {
-        FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
-        String[] customArgs = new String[2];
-        customArgs[0] = fileName;
-        customArgs[1] = "m";
-        FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(customArgs);
-
-        SMPDivideAndConquer smp = new SMPDivideAndConquer(parsedInfo);
+        SMPDivideAndConquerImproved smp =
+                new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
         return smp.runThread();
     }
 
-/*
     @Benchmark
     public String divideAndConquerCallable() {
-        FileInputOutputHelper fileHelper = new FileInputOutputHelper();
-        FileInputOutputHelper.FileParsedInfo parsedInfo =
-                fileHelper.parseInputData(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
-
-        SMPDivideAndConquer smp = new SMPDivideAndConquer(parsedInfo);
+        SMPDivideAndConquerImproved smp =
+                new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
         return smp.runCallable();
     }
-    */
 }
