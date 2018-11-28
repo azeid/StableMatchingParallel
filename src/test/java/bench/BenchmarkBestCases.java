@@ -1,9 +1,7 @@
 package bench;
 
 import org.openjdk.jmh.annotations.*;
-import smp.SMP;
-import smp.SMPData;
-import smp.SMPProducerConsumer;
+import smp.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -36,5 +34,19 @@ public class BenchmarkBestCases {
     public String producerConsumer() {
         SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
         return smp.run();
+    }
+
+    @Benchmark
+    public String divideAndConquerRunnable() {
+        SMPDivideAndConquerImproved smp =
+                new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
+        return smp.runThread();
+    }
+
+    @Benchmark
+    public String divideAndConquerCallable() {
+        SMPDivideAndConquerImproved smp =
+                new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
+        return smp.runCallable();
     }
 }

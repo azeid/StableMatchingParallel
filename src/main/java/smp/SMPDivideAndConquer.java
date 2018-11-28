@@ -142,8 +142,6 @@ public class SMPDivideAndConquer
 
     public static String FinalMatchingArrayToString(MatchingPair[] arr)
     {
-        String matches = "";
-
         // Order results. This should not be part of the benchmarking since it is just
         // how the matching is returned to user
         HashMap<Integer, Integer> OrderedMatchingInteger = new HashMap<Integer, Integer>();
@@ -157,15 +155,16 @@ public class SMPDivideAndConquer
                     SMPDivideAndConquer.getNumberFromString(arr[i].m_otherGenderName));
         }
 
+        StringBuilder matches = new StringBuilder();
         for(Integer optimalGender : OrderedMatchingInteger.keySet())
         {
-            // use .substring(1) to remove first non-digit characters i.e. just leave the integers
-            matches += "(" + optimalGender;
-            matches += "," + OrderedMatchingInteger.get(optimalGender);
-            matches += ")\n";
+
+            matches.append("(" + optimalGender);
+            matches.append("," + OrderedMatchingInteger.get(optimalGender));
+            matches.append(")\n");
         }
 
-        return matches;
+        return matches.toString();
     }
 
     public static int getNumberFromString(String str)
@@ -388,10 +387,12 @@ public class SMPDivideAndConquer
                         new ArrayBlockingQueue<Runnable>(initialMatchingList.length)); // queue with a size
                         */
 
-        //ExecutorService pool = Executors.newCachedThreadPool();
+
 
         while(1 != matchingResultSize)
         {
+            //pool.
+
             final boolean kOddNumberOfChuncks = (0 != matchingResultSize % 2) && (1 != matchingResultSize);
             MatchingPair[] leftOverChunck = new MatchingPair[1];
 
@@ -403,14 +404,13 @@ public class SMPDivideAndConquer
                                 curretMatchingList.get(matchingResultSize - 1).length);
             }
 
-            final int kNumberOfThreadPools = (kOddNumberOfChuncks ? (matchingResultSize - 1) : matchingResultSize) / 2;
+            //final int kNumberOfThreadPools = (kOddNumberOfChuncks ? (matchingResultSize - 1) : matchingResultSize) / 2;
 
-            ExecutorService pool = Executors.newCachedThreadPool();
+            //ExecutorService pool = Executors.newCachedThreadPool();
 
             //ExecutorService pool = Executors.newFixedThreadPool(kNumberOfThreadPools/2);
 
-
-
+            ExecutorService pool = Executors.newCachedThreadPool();
 
             CopyOnWriteArrayList<MatchingPair[]> threadSafeResultList = new CopyOnWriteArrayList<MatchingPair[]>();
 
@@ -423,7 +423,7 @@ public class SMPDivideAndConquer
 
             try
             {
-                pool.shutdownNow();
+                pool.shutdown();
 
                 final int kTimeoutIsSeconds = 10;
                 if (!pool.awaitTermination(kTimeoutIsSeconds, TimeUnit.SECONDS))
@@ -477,9 +477,11 @@ public class SMPDivideAndConquer
 
         String finalMatchingString = "";
 
+        //ExecutorService pool = Executors.newFixedThreadPool(matchingResultSize);
+
+
         while(1 != matchingResultSize)
         {
-            //ExecutorService pool = Executors.newFixedThreadPool(matchingResultSize);
             ExecutorService pool = Executors.newCachedThreadPool();
 
             List<Callable<MergeTwoMatchingSets.Result>> callables = new ArrayList<Callable<MergeTwoMatchingSets.Result>>();
@@ -487,7 +489,6 @@ public class SMPDivideAndConquer
             // increment by 2 since we are processing two chuncks at a time
             for(int i = 0; i < (matchingResultSize - 1); i = (i+2))
             {
-                // TODO: I want results to be added to queue in right order
                 //pool.submit(new WorkerThread(arrayChuncks[i], arrayChuncks[i+1], i));
                 callables.add(new CallableThread(arrayChuncks[i], arrayChuncks[i+1]));
             }
@@ -564,22 +565,43 @@ public class SMPDivideAndConquer
 
         FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
 
-        FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(args);
+        final boolean kIsDebug = false;
+
+        FileInputOutputHelper.FileParsedInfo parsedInfo;
+
+        if(kIsDebug)
+        {
+            String[] customArgs = new String[2];
+            customArgs[0] = "out\\production\\StableMatchingParallel\\WorstCase_8.txt";
+            customArgs[1] = "m";
+            parsedInfo = fileIOHelper.parseInputFile(customArgs);
+        }
+        else
+        {
+            parsedInfo = fileIOHelper.parseInputFile(args);
+        }
 
 
         //FileInputOutputHelper fileIOHelper = new FileInputOutputHelper();
         //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.getDefaultInfo();
 
         //String[] customArgs = new String[2];
-        //customArgs[0] = "out\\production\\StableMatchingParallel\\Random_5.txt";
-        //customArgs[1] = "w";
+        //customArgs[0] = "out\\production\\StableMatchingParallel\\WorstCase_8.txt";
+        //customArgs[1] = "m";
         //FileInputOutputHelper.FileParsedInfo parsedInfo = fileIOHelper.parseInputFile(customArgs);
+
+        //SMPData data = SMPData.loadFromFile("out\\production\\StableMatchingParallel\\WorstCase_8.txt");
+
+        //FileInputOutputHelper fileHelper = new FileInputOutputHelper();
+        //FileInputOutputHelper.FileParsedInfo parsedInfo =
+        //        fileHelper.parseInputData(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
+
 
         SMPDivideAndConquer smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo);
 
         //final String kFinalMatchingString = smpDivideAndConquer.runCallable();
-        final String kFinalMatchingString = smpDivideAndConquer.runThread(); // seems a little faster
-        System.out.println(kFinalMatchingString);
+        //final String kFinalMatchingString = smpDivideAndConquer.runThread(); // seems a little faster
+        //System.out.println(kFinalMatchingString);
 
         // Log End Time
         final long endTime = System.nanoTime();
