@@ -600,8 +600,8 @@ public class SMPDivideAndConquer
         SMPDivideAndConquer smpDivideAndConquer = new SMPDivideAndConquer(parsedInfo);
 
         //final String kFinalMatchingString = smpDivideAndConquer.runCallable();
-        final String kFinalMatchingString = smpDivideAndConquer.runThread(); // seems a little faster
-        System.out.println(kFinalMatchingString);
+        //final String kFinalMatchingString = smpDivideAndConquer.runThread(); // seems a little faster
+        //System.out.println(kFinalMatchingString);
 
         // Log End Time
         final long endTime = System.nanoTime();
