@@ -21,7 +21,7 @@ public class RankingMatrix
     HashMap<String, LinkedList<String>> m_optimalGenderProposalList;
 
 //    HashMap<String[], String[]> m_rankingMatrix;
-    int[][][] m_rankingMatrix;
+    MatrixPair[][] m_rankingMatrix;
 
     public RankingMatrix(
             int[][] optimalGenderDataSet2DArray,
@@ -63,8 +63,6 @@ public class RankingMatrix
         // Initialize Queue to include all bidders
         m_optimalGenderQueue = new LinkedList<String>();
 
-//        m_rankingMatrix = new HashMap<String[], String[]>();
-
         for(int optimalGenderIndex = 0; optimalGenderIndex < m_numberOfRows; ++optimalGenderIndex)
         {
             String optimalGenderName = new String(m_optimalGenderPrefix + Integer.toString(optimalGenderIndex + 1));
@@ -99,17 +97,17 @@ public class RankingMatrix
             m_otherGenderPreferenceHashMap.put(otherGenderName, optimalGenderInPreferenceOrder);
         }
 
-        m_rankingMatrix = new int[m_numberOfRows][m_numberOfRows][2];
+        m_rankingMatrix = new MatrixPair[m_numberOfRows][m_numberOfRows];
 
         for (int optimalGenderIndex = 0; optimalGenderIndex < m_numberOfRows; ++optimalGenderIndex)
         {
             for (int otherGenderIndex = 0; otherGenderIndex < m_numberOfRows; ++otherGenderIndex)
             {
-                m_rankingMatrix[optimalGenderIndex][otherGenderIndex][0] = (optimalGenderDataSet2DArray[optimalGenderIndex][otherGenderIndex]);
-                m_rankingMatrix[optimalGenderIndex][otherGenderIndex][1] = (otherGenderDataSet2DArray[otherGenderIndex][optimalGenderIndex]);
+                m_rankingMatrix[optimalGenderIndex][otherGenderIndex] = new MatrixPair((optimalGenderDataSet2DArray[optimalGenderIndex][otherGenderIndex]),
+                                                                                        (otherGenderDataSet2DArray[otherGenderIndex][optimalGenderIndex]));
 
 //                TODO:Remove print
-                System.out.print(Integer.toString(m_rankingMatrix[optimalGenderIndex][otherGenderIndex][0]) + "," + Integer.toString(m_rankingMatrix[optimalGenderIndex][otherGenderIndex][1]) + "  ");
+                System.out.print(Integer.toString(m_rankingMatrix[optimalGenderIndex][otherGenderIndex].getLeftValue()) + "," + Integer.toString(m_rankingMatrix[optimalGenderIndex][otherGenderIndex].getRightValue()) + "  ");
             }
 //            TODO:Remove Print
             System.out.println(" ");
@@ -146,7 +144,7 @@ public class RankingMatrix
             System.out.println(Integer.toString(item) + " ");
         }
 
-        HashMap<String, LinkedList<int[]>> unstablePairsPerRow = new HashMap<String, LinkedList<int[]>>();
+        HashMap<String, LinkedList<MatrixCoordinate>> unstablePairsPerRow = new HashMap<String, LinkedList<MatrixCoordinate>>();
 
         // Unstable pair detection.
         // TODO: parallelize
@@ -155,13 +153,11 @@ public class RankingMatrix
             for (int j = 0; j < m_numberOfColumns; ++j)
             {
                 //a_i,j is unstable if a_i,j^L < M(R_i)^L and a_i,j^R < M(C_j)^R
-                if ((m_rankingMatrix[i][j][0] < m_rankingMatrix[i][permutatedArray[i]][0]) &&
-                        (m_rankingMatrix[i][j][1] < m_rankingMatrix[tranposedIndices[j]][j][1]))
+                if ((m_rankingMatrix[i][j].getLeftValue() < m_rankingMatrix[i][permutatedArray[i]].getLeftValue()) &&
+                        (m_rankingMatrix[i][j].getRightValue() < m_rankingMatrix[tranposedIndices[j]][j].getRightValue()))
                 {
-                    int[] currentPair = new int[2];
-                    currentPair[0] = i;
-                    currentPair[1] = j;
-                    LinkedList<int[]> unstablePairsInRow = new LinkedList<int[]>();
+                    MatrixCoordinate currentPair = new MatrixCoordinate(i,j);
+                    LinkedList<MatrixCoordinate> unstablePairsInRow = new LinkedList<MatrixCoordinate>();
                     if(unstablePairsPerRow.containsKey(Integer.toString(i)))
                     {
                         unstablePairsInRow.addAll(unstablePairsPerRow.get(Integer.toString(i)));
@@ -181,36 +177,36 @@ public class RankingMatrix
         System.out.println("Found " + "unstable pairs");
         for (String row: unstablePairsPerRow.keySet())
         {
-            for (int[] pair: unstablePairsPerRow.get(row))
+            for (MatrixCoordinate pair: unstablePairsPerRow.get(row))
             {
-                System.out.println(Integer.toString(pair[0]) + "," + Integer.toString(pair[1]));
+                System.out.println(Integer.toString(pair.getI()) + "," + Integer.toString(pair.getJ()));
             }
         }
 
-        HashMap<String, LinkedList<int[]>> nm1_genPairs = new HashMap<String, LinkedList<int[]>>();
+        HashMap<String, LinkedList<MatrixCoordinate>> nm1_genPairs = new HashMap<String, LinkedList<MatrixCoordinate>>();
 
         System.out.println("per row");
         for (String row: unstablePairsPerRow.keySet())
         {
-            int[] pair;
+            MatrixCoordinate pair;
             pair = getMinLeftValuedPair(unstablePairsPerRow.get(row));
             //TODO:Remove Print.
-            System.out.println(Integer.toString(pair[0])+"," +Integer.toString(pair[1]));
+            System.out.println(Integer.toString(pair.getI())+"," +Integer.toString(pair.getJ()));
 
-            LinkedList<int[]> unstablePairsInColumn = new LinkedList<int[]>();
-            if(nm1_genPairs.containsKey(Integer.toString(pair[1])))
+            LinkedList<MatrixCoordinate> unstablePairsInColumn = new LinkedList<MatrixCoordinate>();
+            if(nm1_genPairs.containsKey(Integer.toString(pair.getJ())))
             {
-                unstablePairsInColumn.addAll(nm1_genPairs.get(Integer.toString(pair[1])));
+                unstablePairsInColumn.addAll(nm1_genPairs.get(Integer.toString(pair.getJ())));
                 unstablePairsInColumn.add(pair);
-                nm1_genPairs.replace(Integer.toString(pair[1]), unstablePairsInColumn);
+                nm1_genPairs.replace(Integer.toString(pair.getJ()), unstablePairsInColumn);
             }
             else {
                 unstablePairsInColumn.add(pair);
-                nm1_genPairs.put(Integer.toString(pair[1]), unstablePairsInColumn);
+                nm1_genPairs.put(Integer.toString(pair.getJ()), unstablePairsInColumn);
             }
         }
 
-        LinkedList<int[]> nm1_pairs = new LinkedList<int[]>();
+        LinkedList<MatrixCoordinate> nm1_pairs = new LinkedList<MatrixCoordinate>();
 
         //TODO:remove print
         System.out.println("nm1_pairs");
@@ -218,32 +214,160 @@ public class RankingMatrix
         {
             nm1_pairs.add(getMinRightValuedPair(nm1_genPairs.get(column)));
             //TODO: Remove print
-            System.out.println(Integer.toString(getMinRightValuedPair(nm1_genPairs.get(column))[0])+"," +Integer.toString(getMinRightValuedPair(nm1_genPairs.get(column))[1]));
+            System.out.println(Integer.toString(getMinRightValuedPair(nm1_genPairs.get(column)).getI())+"," +Integer.toString(getMinRightValuedPair(nm1_genPairs.get(column)).getJ()));
+        }
+
+        HashMap<String, LinkedList<MatrixCoordinate>> nm2_generatingPairs = new HashMap<String, LinkedList<MatrixCoordinate>>();
+
+        HashMap<String, LinkedList<MatrixCoordinate>> nm2_edges = new HashMap<String, LinkedList<MatrixCoordinate>>();
+
+        if(!nm1_pairs.isEmpty())
+        {
+            //start computation of nm2 generating pairs
+            for (MatrixCoordinate nm1_pair : nm1_pairs)
+            {
+                MatrixCoordinate nm2_counter = new MatrixCoordinate(tranposedIndices[nm1_pair.getJ()],permutatedArray[nm1_pair.getI()]);
+                //Establish relationship from Matching pairs to nm2-pair
+                MatrixCoordinate matching1 = new MatrixCoordinate(tranposedIndices[nm1_pair.getJ()],nm1_pair.getJ());
+                MatrixCoordinate matching2 = new MatrixCoordinate(nm1_pair.getI(),permutatedArray[nm1_pair.getI()]);
+                String counterName = nm2_counter.toString();
+                String m1St = matching1.toString();
+                String m2St = matching2.toString();
+                if(nm2_generatingPairs.containsKey(m1St))
+                {
+                    LinkedList<MatrixCoordinate> relatedPairs = new LinkedList<MatrixCoordinate>();
+                    relatedPairs.addAll(nm2_generatingPairs.get(m1St));
+                    for (MatrixCoordinate pair: relatedPairs)
+                    {
+                        //Add related pairs to the list of current nm2 pair.
+                        if (nm2_edges.containsKey(counterName))
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.addAll(nm2_edges.get(counterName));
+                            edgesToPair.add(pair);
+                            nm2_edges.replace(counterName,edgesToPair);
+                        }
+                        else
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.add(pair);
+                            nm2_edges.put(counterName,edgesToPair);
+                        }
+
+                        //Add new nm2 to any list of its related pairs.
+                        String pairName = new String();
+                        pairName = pair.toString();
+                        if (nm2_edges.containsKey(pairName))
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.addAll(nm2_edges.get(pairName));
+                            edgesToPair.add(nm2_counter);
+                            nm2_edges.replace(pairName,edgesToPair);
+                        }
+                        else
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.add(nm2_counter);
+                            nm2_edges.put(pairName,edgesToPair);
+                        }
+                    }
+                    relatedPairs.add(nm2_counter);
+                    nm2_generatingPairs.replace(m1St,relatedPairs);
+                }
+                else
+                {
+                    LinkedList<MatrixCoordinate> relatedPairs = new LinkedList<MatrixCoordinate>();
+                    relatedPairs.add(nm2_counter);
+                    nm2_generatingPairs.put(m1St,relatedPairs);
+                }
+                if(nm2_generatingPairs.containsKey(m2St))
+                {
+                    LinkedList<MatrixCoordinate> relatedPairs = new LinkedList<MatrixCoordinate>();
+                    relatedPairs.addAll(nm2_generatingPairs.get(m2St));
+                    for (MatrixCoordinate pair: relatedPairs)
+                    {
+                        //Add related pairs to the list of current nm2 pair.
+                        if (nm2_edges.containsKey(counterName))
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.addAll(nm2_edges.get(counterName));
+                            edgesToPair.add(pair);
+                            nm2_edges.replace(counterName,edgesToPair);
+                        }
+                        else
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.add(pair);
+                            nm2_edges.put(counterName,edgesToPair);
+                        }
+
+                        //Add new nm2 to any list of its related pairs.
+                        String pairName = new String();
+                        pairName = pair.toString();
+                        if (nm2_edges.containsKey(pairName))
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.addAll(nm2_edges.get(pairName));
+                            edgesToPair.add(nm2_counter);
+                            nm2_edges.replace(pairName,edgesToPair);
+                        }
+                        else
+                        {
+                            LinkedList<MatrixCoordinate> edgesToPair = new LinkedList<MatrixCoordinate>();
+                            edgesToPair.add(nm2_counter);
+                            nm2_edges.put(pairName,edgesToPair);
+                        }
+                    }
+                    relatedPairs.add(nm2_counter);
+                    nm2_generatingPairs.replace(m2St,relatedPairs);
+                }
+                else
+                {
+                    LinkedList<MatrixCoordinate> relatedPairs = new LinkedList<MatrixCoordinate>();
+                    relatedPairs.add(nm2_counter);
+                    nm2_generatingPairs.put(m2St,relatedPairs);
+                }
+            }
+        }
+
+        LinkedList<String> Chains = new LinkedList<String>();
+
+        for (String edgesName:nm2_edges.keySet())
+        {
+            if (nm2_edges.get(edgesName).size()==1)
+            {
+                if (!Chains.contains(edgesName)
+                {
+
+                }
+            }
         }
 
     }
 
-    private int[] getMinRightValuedPair(LinkedList<int[]> nm1_pairsInColumn)
+    //Required in NM1 set calculation
+    private MatrixCoordinate getMinRightValuedPair(LinkedList<MatrixCoordinate> nm1_pairsInColumn)
     {
-        int[] minRightValuedPair = nm1_pairsInColumn.get(0);
-        for (int[] pair:nm1_pairsInColumn)
+        MatrixCoordinate minRightValuedPair = nm1_pairsInColumn.get(0);
+        for (MatrixCoordinate pair:nm1_pairsInColumn)
         {
-            if (m_rankingMatrix[pair[0]][pair[1]][1] < m_rankingMatrix[minRightValuedPair[0]][minRightValuedPair[1]][1])
+            if (m_rankingMatrix[pair.getI()][pair.getJ()].getRightValue() < m_rankingMatrix[minRightValuedPair.getI()][minRightValuedPair.getJ()].getRightValue())
             {
-                minRightValuedPair = pair.clone();
+                minRightValuedPair = new MatrixCoordinate(pair.getI(),pair.getJ());
             }
         }
         return minRightValuedPair;
     }
 
-    private int[] getMinLeftValuedPair(LinkedList<int[]> nm1_pairsInRow)
+    //Required in NM1 set calculation
+    private MatrixCoordinate getMinLeftValuedPair(LinkedList<MatrixCoordinate> nm1_pairsInRow)
     {
-        int[] minLeftValuedPair = nm1_pairsInRow.get(0);
-        for (int[] pair:nm1_pairsInRow)
+        MatrixCoordinate minLeftValuedPair = nm1_pairsInRow.get(0);
+        for (MatrixCoordinate pair:nm1_pairsInRow)
         {
-            if (m_rankingMatrix[pair[0]][pair[1]][0] < m_rankingMatrix[minLeftValuedPair[0]][minLeftValuedPair[1]][0])
+            if (m_rankingMatrix[pair.getI()][pair.getJ()].getLeftValue() < m_rankingMatrix[minLeftValuedPair.getI()][minLeftValuedPair.getJ()].getLeftValue())
             {
-                minLeftValuedPair = pair.clone();
+                minLeftValuedPair = new MatrixCoordinate(pair.getI(),pair.getJ());
             }
         }
         return minLeftValuedPair;
