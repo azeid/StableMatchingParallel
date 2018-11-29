@@ -150,8 +150,6 @@ public class BipartiteGraph
 
     public String getFinalMatchingGraphToString()
     {
-        String matches = new String();
-
         HashMap<Integer, Integer> orderedFinalMatching = new HashMap<Integer, Integer>();
 
         // Arrange output to follow results given from TA
@@ -164,15 +162,17 @@ public class BipartiteGraph
                     Integer.parseInt(new String(otherGender.substring(1))));
         }
 
+        StringBuilder matches = new StringBuilder();
         for(int i = 0; i < orderedFinalMatching.size(); ++i)
         {
+
             Integer currentOptimalGenderIndex = i + 1;
-            matches += "(" + currentOptimalGenderIndex;
-            matches += "," + orderedFinalMatching.get(currentOptimalGenderIndex);
-            matches += ")\n";
+            matches.append("(" + currentOptimalGenderIndex);
+            matches.append("," + orderedFinalMatching.get(currentOptimalGenderIndex));
+            matches.append(")\n");
         }
 
-        return matches;
+        return matches.toString();
     }
 
     public void writeFinalMatchingToFile(String outputFileName)

@@ -23,14 +23,14 @@ public class SMP
         String kPreference = "";
         String kOutputFile = "";
 
-        final int kExpectedNumberOfArguments = 3;
+        //final int kExpectedNumberOfArguments = 3;
 
-        if(kExpectedNumberOfArguments == args.length)
+        if(2 == args.length || 3 == args.length)
         {
             // Assuming File In Same Directory
             final String kFileName = args[0];
             kPreference = args[1];
-            kOutputFile = args[2];
+            kOutputFile = (3 == args.length) ? args[2] : "";
             try (Stream<String> stream = Files.lines(Paths.get(kFileName)))
             {
                 // This remove data from stream object into fileLines
