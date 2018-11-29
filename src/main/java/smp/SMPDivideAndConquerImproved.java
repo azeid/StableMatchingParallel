@@ -345,6 +345,7 @@ public class SMPDivideAndConquerImproved
                 pool.execute(new RunnableThread(curretMatchingList.get(i), curretMatchingList.get(i+1), threadSafeResultList));
             }
 
+
             try
             {
                 pool.shutdown();
@@ -396,11 +397,10 @@ public class SMPDivideAndConquerImproved
         int matchingResultSize = initialMatchingList.length;
 
         String finalMatchingString = "";
+        ExecutorService pool = Executors.newCachedThreadPool();
 
         while(1 != matchingResultSize)
         {
-            ExecutorService pool = Executors.newCachedThreadPool(); // moving this outside causes an error
-
             List<Callable<MergeTwoMatchingSets.Result>> callables = new ArrayList<Callable<MergeTwoMatchingSets.Result>>();
 
             // increment by 2 since we are processing two chuncks at a time
@@ -455,11 +455,9 @@ public class SMPDivideAndConquerImproved
             {
                 ex.printStackTrace();
             }
-            finally
-            {
-                pool.shutdownNow();
-            }
         }
+
+        pool.shutdown();
 
         if(finalMatchingString.isEmpty())
         {
@@ -496,9 +494,9 @@ public class SMPDivideAndConquerImproved
         SMPDivideAndConquerImproved smpDivideAndConquerImproved =
                 new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), kOptimality);
 
-        //final String kFinalMatchingString = smpDivideAndConquerImproved.runCallable();
+        final String kFinalMatchingString = smpDivideAndConquerImproved.runCallable();
         //final String kFinalMatchingString = smpDivideAndConquerImproved.runThread(); // seems a little faster
-        //System.out.println(kFinalMatchingString);
+        System.out.println(kFinalMatchingString);
 
         // Log End Time
         final long endTime = System.nanoTime();
