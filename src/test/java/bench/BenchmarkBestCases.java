@@ -31,8 +31,8 @@ public class BenchmarkBestCases {
     }
 
     @Benchmark
-    public String producerConsumer() {
-        SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
+    public String parallelGaleShapley() {
+        ParallelGaleShapley smp = new ParallelGaleShapley(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
         return smp.run();
     }
 
