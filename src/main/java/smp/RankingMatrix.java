@@ -1,5 +1,7 @@
 package smp;
 
+import com.sun.tools.javac.jvm.Code;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.HashMap;
@@ -330,19 +332,49 @@ public class RankingMatrix
             }
         }
 
-        LinkedList<String> Chains = new LinkedList<String>();
+        LinkedList<MatrixCoordinate> nm2_Pairs = new LinkedList<MatrixCoordinate>();
 
-        for (String edgesName:nm2_edges.keySet())
+        LinkedList<String> chainHistory = new LinkedList<String>();
+
+         for (String edgesName:nm2_edges.keySet())
         {
             if (nm2_edges.get(edgesName).size()==1)
             {
-                if (!Chains.contains(edgesName)
-                {
 
+                LinkedList<String> chain = new LinkedList<String>();
+
+                if (!chainHistory.contains(edgesName))
+                {
+                    chainHistory.add(edgesName);
+                    chain.add(edgesName);
+                    chain = FindChain(chain edgesName)
                 }
             }
         }
 
+
+        //Add Isolated pairs, done at the end to reduce comparisons.
+        for (String matchingPair: nm2_generatingPairs.keySet())
+        {
+            if(nm2_generatingPairs.get(matchingPair).size()==1)
+            {
+                nm2_Pairs.add(nm2_generatingPairs.get(matchingPair).get(0));
+            }
+        }
+
+
+        for nm
+    }
+
+    private LinkedList<String> FindChain( LinkedList<String> chains,  HashMap<String, LinkedList<MatrixCoordinate>> nm2_edges, String currentName )
+    {
+        for (MatrixCoordinate pair: nm2_edges.get(currentName))
+        {
+            LinkedList<String> updatedPath= new LinkedList<String>();
+            updatedPath.addAll(chains);
+            if(!chains.contains(pair.toString()))
+                LinkedList<String> subPath= new LinkedList<String>();
+        }
     }
 
     //Required in NM1 set calculation
