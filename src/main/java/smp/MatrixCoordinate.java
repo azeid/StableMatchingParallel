@@ -36,14 +36,6 @@ public class MatrixCoordinate {
         return Integer.toString(i) + "," + Integer.toString(j);
     }
 
-    public int getI_fromString(String s) {
-        return Integer.parseInt(s.split(",")[0]);
-    }
-
-    public int getJ_fromString(String s) {
-        return Integer.parseInt(s.split(",")[1]);
-    }
-
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
