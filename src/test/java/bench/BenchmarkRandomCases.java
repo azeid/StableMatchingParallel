@@ -49,4 +49,11 @@ public class BenchmarkRandomCases {
                 new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
         return smp.runCallable();
     }
+    
+    @Benchmark
+    public String masterSlaveCallable() {
+        JavaSMPMasterSlave smp =
+                new JavaSMPMasterSlave(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
+        return smp.run();
+    }
 }
