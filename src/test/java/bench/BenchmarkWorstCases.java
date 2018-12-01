@@ -31,8 +31,8 @@ public class BenchmarkWorstCases {
     }
 
     @Benchmark
-    public String producerConsumer() {
-        SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
+    public String parallelGaleShapley() {
+        ParallelGaleShapley smp = new ParallelGaleShapley(data.getPreferencesOne(), data.getPreferencesTwo(), "m");
         return smp.run();
     }
 
@@ -48,5 +48,12 @@ public class BenchmarkWorstCases {
         SMPDivideAndConquerImproved smp =
                 new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
         return smp.runCallable();
+    }
+    
+    @Benchmark
+    public String masterSlaveCallable() {
+        JavaSMPMasterSlave smp =
+                new JavaSMPMasterSlave(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
+        return smp.run();
     }
 }

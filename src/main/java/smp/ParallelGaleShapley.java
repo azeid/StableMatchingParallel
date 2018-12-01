@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class SMPProducerConsumer {
+public class ParallelGaleShapley {
 
     private int[][] pref1;
     private int[][] pref2;
@@ -15,7 +15,7 @@ public class SMPProducerConsumer {
     private int[] matching;
 
 
-    public SMPProducerConsumer(int[][] man_preferences, int[][] women_preferences, String optimality) {
+    public ParallelGaleShapley(int[][] man_preferences, int[][] women_preferences, String optimality) {
         if (optimality.compareTo("m") == 0) {
             this.pref1 = man_preferences;
             this.pref2 = women_preferences;
@@ -165,7 +165,7 @@ public class SMPProducerConsumer {
 
         SMPData data = SMPData.loadFromFile(args[0]);
 
-        SMPProducerConsumer smp = new SMPProducerConsumer(data.getPreferencesOne(), data.getPreferencesTwo(), optimality);
+        ParallelGaleShapley smp = new ParallelGaleShapley(data.getPreferencesOne(), data.getPreferencesTwo(), optimality);
         System.out.println(smp.run());
     }
 
