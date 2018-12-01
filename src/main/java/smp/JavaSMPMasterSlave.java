@@ -49,7 +49,7 @@ public class JavaSMPMasterSlave {
             //System.out.println("here");
             //matchmaker.print_matchings();
             //i++;
-        //}while(i < 1);
+        //}while(i < 3);
         }while(!matchmaker.done);
         return matchmaker.get_matchings();
     }
@@ -81,7 +81,7 @@ public class JavaSMPMasterSlave {
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 woman_preferences[i][j] = input.nextInt() - 1;
-        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "m");
+        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "w");
         System.out.println(test.run());
     }
 }
@@ -156,7 +156,9 @@ class Master {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             int[] partners = new int[this.slave_count];
             for(int i = 0; i < this.slave_count; i++){
-                partners[this.res.get_current_partner(i)] = i;
+                if(this.res.get_current_partner(i) != -1){
+                    partners[this.res.get_current_partner(i)] = i;
+                }
             }
             StringBuilder matches = new StringBuilder();
             for(int i = 0; i < partners.length; i++)
@@ -220,6 +222,9 @@ class Master {
                 this.sharedResource.update_man_availability(best_man_id);
                 this.sharedResource.update_partner(best_man_id, this.woman_id);
             }
+            else if(best_man_id == this.sharedResource.get_current_partner(this.woman_id)){
+                //System.out.println("Yay");
+            }
             else{
                 this.sharedResource.update_man_availability(best_man_id);
                 this.sharedResource.update_partner(best_man_id, woman_id);
@@ -272,12 +277,19 @@ class Master {
             Arrays.fill(this.current_man_request_position, 0);
         }
         
-        public int[] get_all_prefs_at_current_request_position(){
+        public synchronized int[] get_all_prefs_at_current_request_position(){
             int[] array_to_return = new int[this.man_prefs.length];
             for(int i = 0; i < array_to_return.length; i++){
+                //System.out.println(this.men_availability[8]);
+                //System.out.println(this.men_availability[7]);
                 if(this.men_availability[i]){
+                    //System.out.println(i);
+                    //System.out.println(this.man_prefs[i]);
+                    //System.out.println(this.current_man_request_position[i]);
                     array_to_return[i] = this.man_prefs[i][this.current_man_request_position[i]];
-                    this.increase_current_request_position(i);
+                    if(this.current_man_request_position[i] < array_to_return.length - 1){
+                        this.increase_current_request_position(i);
+                    }
                 }
                 else{
                     array_to_return[i] = -1;
@@ -286,7 +298,7 @@ class Master {
             return array_to_return;
         }
         
-        public void increase_current_request_position(int man_id){
+        public synchronized void increase_current_request_position(int man_id){
             this.current_man_request_position[man_id]++;
         }
         
@@ -294,11 +306,11 @@ class Master {
             this.current_partners[woman_id] = man_id;
         }
         
-        public int get_current_partner(int woman_id){
+        public synchronized int get_current_partner(int woman_id){
             return this.current_partners[woman_id];
         }
         
-        public int[] get_woman_pref_list(int woman_id){
+        public synchronized int[] get_woman_pref_list(int woman_id){
             int[] array_to_return = new int[this.woman_prefs[woman_id].length];
             System.arraycopy(this.woman_prefs[woman_id], 0, array_to_return, 0, array_to_return.length);
             return array_to_return;
@@ -312,6 +324,10 @@ class Master {
             for(int i = 0; i < this.men_availability.length; i++){
                 //System.out.println(this.men_availability.length);
                 //System.out.println(this.men_availability[i]);
+                //System.out.println(this.men_availability[i]);
+                //System.out.println(this.current_partners[i]);
+                //System.out.println(this.men_availability[8]);
+                //System.out.println(this.current_partners[1]);
                 if(this.men_availability[i]){
                     return false;
                 }
