@@ -1,0 +1,69 @@
+\documentclass[sigconf]{acmart}
+\usepackage{graphics}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{url}
+\usepackage{setspace}
+
+\linespread{1.5}
+
+\makeatletter
+\def\subsubsection{\@startsection{subsubsection}{3}%
+  \z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+  {\normalfont\itshape}}
+\makeatother
+
+\begin{document}
+\title{Parallel Algorithm for Stable Marriage}
+
+\author{Zeid Ayssa}
+\affiliation{
+    \institution{University of Texas at Austin \\ Dept. of Electrical and Computer Engineering}
+}
+\email{azeid@utexas.edu}
+
+\author{Tyler King}
+\affiliation{
+    \institution{University of Texas at Austin \\ Dept. of Electrical and Computer Engineering}
+}
+\email{tylerhk93@gmail.com}
+
+\author{Guillermo Le\'on}
+\affiliation{
+    \institution{University of Texas at Austin \\ Dept. of Electrical and Computer Engineering}
+}
+\email{gleon@utexas.edu}
+
+\author{Jesus Valenzuela}
+\affiliation{
+    \institution{University of Texas at Austin \\ Dept. of Electrical and Computer Engineering}
+}
+\email{javier.valenzuela@utexas.edu}
+
+\begin{abstract}
+The Gale-Shapley\cite{gale1962college} “propose/reject” algorithm is a well-known procedure for solving the classical stable marriage problem. In this paper a few alternatives for a parallel algorithm to solve the stable marriage problem are given. The worst case performance of our implementation is stated.    
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+\input{sections/introduction.tex}
+
+\section{Implementation}
+\input{sections/implementation.tex}
+
+\section{Evaluation}
+\input{sections/evaluation.tex}
+
+\section{Future Work}
+\input{sections/future_work.tex}
+
+\section{Conclusion}
+\input{sections/conclusion.tex}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

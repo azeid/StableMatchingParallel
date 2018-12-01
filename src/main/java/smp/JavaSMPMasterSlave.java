@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package smp;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
