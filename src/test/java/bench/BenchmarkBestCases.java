@@ -37,13 +37,6 @@ public class BenchmarkBestCases {
     }
 
     @Benchmark
-    public String divideAndConquerRunnable() {
-        SMPDivideAndConquerImproved smp =
-                new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");
-        return smp.runThread();
-    }
-
-    @Benchmark
     public String divideAndConquerCallable() {
         SMPDivideAndConquerImproved smp =
                 new SMPDivideAndConquerImproved(data.getPreferencesOne(), data.getPreferencesTwo(), data.getSize(), "m");

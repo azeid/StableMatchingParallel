@@ -89,10 +89,11 @@ public class SMP
         //System.out.println();
         //printDataSet2DArray(OriginalWomenDataSet2D, dataSetSize);
 
+        String finalMatching = "";
         if(0 == kPreference.compareToIgnoreCase("m"))
         {
             // man optimal matching
-            performSMPAlgorithm(
+            finalMatching = performSMPAlgorithm(
                     OriginalMenDataSet2D,
                     OriginalWomenDataSet2D,
                     dataSetSize,
@@ -101,7 +102,7 @@ public class SMP
         else if (0 == kPreference.compareToIgnoreCase("w"))
         {
             // woman optimal matching
-            performSMPAlgorithm(
+            finalMatching = performSMPAlgorithm(
                     OriginalWomenDataSet2D,
                     OriginalMenDataSet2D,
                     dataSetSize,
@@ -112,6 +113,8 @@ public class SMP
             System.out.println("Invalid Preference Argument: " + kPreference);
             System.exit(-100);
         }
+
+        System.out.println(finalMatching);
 
         // Log End Time
         final long endTime = System.nanoTime();
