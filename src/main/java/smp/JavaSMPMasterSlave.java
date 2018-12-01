@@ -3,8 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javasmpmasterslave;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -16,8 +14,44 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public class JavaSMPMasterSlave {
-
+    public static int[][] m_prefs;
+    public static int[][] w_prefs;
+    public int size;
+    public String optimality;
     
+    public JavaSMPMasterSlave(int[][] man_preferences, int[][] woman_preferences, int size, String optimality){
+        this.size = size;
+        this.m_prefs = new int[size][size];
+        this.w_prefs = new int[size][size];
+        if(0 == optimality.compareToIgnoreCase("m")){
+            //System.out.println("Man Optimal");
+            for(int i = 0; i < man_preferences.length; i++){
+                System.arraycopy(man_preferences[i], 0, this.m_prefs[i], 0, size);
+                System.arraycopy(woman_preferences[i], 0, this.w_prefs[i], 0, size);
+            }
+        }
+        else{
+            //System.out.println("Woman Optimal");
+            for(int i = 0; i < man_preferences.length; i++){
+                System.arraycopy(man_preferences[i], 0, this.w_prefs[i], 0, size);
+                System.arraycopy(woman_preferences[i], 0, this.m_prefs[i], 0, size);
+            }
+        }
+    }
+    
+    public String run(){
+        Master matchmaker;
+        matchmaker = new Master(this.m_prefs, this.w_prefs);
+        //int i = 0;
+        do{
+            matchmaker.proposal_round();
+            //System.out.println("here");
+            //matchmaker.print_matchings();
+            //i++;
+        //}while(i < 1);
+        }while(!matchmaker.done);
+        return matchmaker.get_matchings();
+    }
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -46,18 +80,8 @@ public class JavaSMPMasterSlave {
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 woman_preferences[i][j] = input.nextInt() - 1;
-        
-        Master matchmaker;
-        matchmaker = new Master(woman_preferences, man_preferences);
-        //int i = 0;
-        do{
-            matchmaker.proposal_round();
-            //System.out.println("here");
-            //matchmaker.print_matchings();
-            //i++;
-        //}while(i < 1);
-        }while(!matchmaker.done);
-        matchmaker.print_matchings();
+        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "m");
+        System.out.println(test.run());
     }
 }
 
@@ -126,6 +150,24 @@ class Master {
                 System.out.println("(" + Integer.toString(i + 1) + "," + Integer.toString(partners[i] + 1) + ")");
             }
         }
+
+        public String get_matchings() {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            int[] partners = new int[this.slave_count];
+            for(int i = 0; i < this.slave_count; i++){
+                partners[this.res.get_current_partner(i)] = i;
+            }
+            StringBuilder matches = new StringBuilder();
+            for(int i = 0; i < partners.length; i++)
+            {
+
+                matches.append("(" + Integer.toString(i + 1));
+                matches.append("," + Integer.toString(partners[i] + 1));
+                matches.append(")\n");
+            }
+
+            return matches.toString();
+        }   
     }
     
     class Slave extends Thread {
