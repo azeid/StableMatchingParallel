@@ -56,8 +56,8 @@ public class JavaSMPMasterSlave {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        if (args.length != 1) {
-            System.out.println("Usage:\njava JavaSMPMasterSlave <input_file>");
+        if (args.length != 2) {
+            System.out.println("Usage:\njava JavaSMPMasterSlave <input_file> <m|w>");
             return;
         }
 
@@ -81,7 +81,7 @@ public class JavaSMPMasterSlave {
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 woman_preferences[i][j] = input.nextInt() - 1;
-        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "m");
+        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, args[1]);
         System.out.println(test.run());
     }
 }
