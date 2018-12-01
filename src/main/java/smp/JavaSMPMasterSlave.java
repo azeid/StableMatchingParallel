@@ -81,7 +81,7 @@ public class JavaSMPMasterSlave {
         for(int i = 0; i < n; i++)
             for(int j = 0; j < n; j++)
                 woman_preferences[i][j] = input.nextInt() - 1;
-        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "w");
+        JavaSMPMasterSlave test = new JavaSMPMasterSlave(man_preferences, woman_preferences, n, "m");
         System.out.println(test.run());
     }
 }
