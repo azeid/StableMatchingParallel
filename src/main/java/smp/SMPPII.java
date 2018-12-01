@@ -121,65 +121,15 @@ public class SMPPII
             int numberOfRowsAndColumns,
             String preference)
     {
-        RankingMatrix myBipartiteGraph = new RankingMatrix(
+        RankingMatrix myRankingMatrix = new RankingMatrix(
                 optimalGenderDataSet2DArray,
                 otherGenderDataSet2DArray,
                 numberOfRowsAndColumns,
                 preference);
 
-        // This is helpful for debugging.
-        // BestCase: it should be 0
-        // WorstCase: it should be (n - 1) * (n - 1) = n^2 - 2n + 1
-        // Where n is the number of preferences per gender
-        // Reference: http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.52.824&rep=rep1&type=pdf
-        int numberOfRejections = 0;
+        myRankingMatrix.findStableMatching();
 
-        while(!myBipartiteGraph.isOptimalGenderQueueEmpty())
-        {
-            String currentOptimalGender = myBipartiteGraph.dequeueOptimalPerson();
-
-            String currentOtherGender = myBipartiteGraph.getNextMostPreferredOtherGender(currentOptimalGender);
-
-            if(myBipartiteGraph.isOtherGenderEngaged(currentOtherGender))
-            {
-                if(myBipartiteGraph.doesOtherGenderPreferCurrentFianceOverOptimalChoice(currentOtherGender, currentOptimalGender))
-                {
-                    // current optimal gender was rejected, put him back in the queue
-                    myBipartiteGraph.enqueueOptimalGenderPerson(currentOptimalGender);
-                }
-                else
-                {
-                    // this means that other gender prefers current optimal gender more than the one it is currently
-                    // engaged to
-                    String fianceThatWasDumped = myBipartiteGraph.dumpCurrentFiance(currentOtherGender);
-                    // put back in queue
-                    myBipartiteGraph.enqueueOptimalGenderPerson(fianceThatWasDumped);
-
-                    // engage current partners
-                    myBipartiteGraph.engageOtherGenderToOptimalGender(currentOtherGender, currentOptimalGender);
-                }
-
-                ++numberOfRejections;
-            }
-            else
-            {
-                // since other gender is free, they have to get engaged
-                myBipartiteGraph.engageOtherGenderToOptimalGender(currentOtherGender, currentOptimalGender);
-            }
-        }
-
-        //final String finalMatchingGraph = myBipartiteGraph.getFinalMatchingGraphToString();
-        //System.out.println(finalMatchingGraph);
-        // System.out.println("Number of Rejections: " + numberOfRejections);
-        // n^2 - 2n + 1
-        final double kWorstCaseRejections = Math.round(
-                Math.pow(numberOfRowsAndColumns, 2) - (2 * numberOfRowsAndColumns) + 1);
-        if((int)kWorstCaseRejections == numberOfRejections)
-        {
-            // System.out.println("This is a Worst Case");
-        }
-
-        return myBipartiteGraph.getFinalMatchingGraphToString();
+        return myRankingMatrix.getFinalMatchingGraphToString();
     }
 
 

@@ -33,7 +33,7 @@ public class MatrixCoordinate {
     }
 
     public String toString() {
-        return Integer.toString(i) + "," + Integer.toString(j);
+        return "("+Integer.toString(i) + "," + Integer.toString(j)+")";
     }
 
     @Override

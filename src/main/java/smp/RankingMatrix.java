@@ -1,10 +1,5 @@
 package smp;
 
-
-import sun.awt.image.ImageWatched;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -13,6 +8,7 @@ public class RankingMatrix {
     private int m_numberOfColumns;
     private String m_optimalGenderPrefix;
     private String m_otherGenderPrefix;
+    private int[] m_currentMatching;
 
     HashMap<String, String> m_otherGenderEngagementPartner;
 
@@ -34,6 +30,7 @@ public class RankingMatrix {
         // Assumption: square matrix is supplied
         m_numberOfRows = numberOfRowsAndColumns;
         m_numberOfColumns = numberOfRowsAndColumns;
+        m_currentMatching = new int[m_numberOfRows];
 
         if (0 == preferenceString.compareToIgnoreCase("m")) {
             // man optimal matching
@@ -48,47 +45,7 @@ public class RankingMatrix {
             System.exit(-100);
         }
 
-        // I want a stack of preferences for each optimal
-
-        m_optimalGenderProposalList = new HashMap<String, LinkedList<String>>();
-
-        m_otherGenderPreferenceHashMap = new HashMap<String, LinkedList<String>>();
-
-        m_otherGenderEngagementPartner = new HashMap<String, String>();
-
-        // Initialize Queue to include all bidders
-        m_optimalGenderQueue = new LinkedList<String>();
-
-        for (int optimalGenderIndex = 0; optimalGenderIndex < m_numberOfRows; ++optimalGenderIndex) {
-            String optimalGenderName = new String(m_optimalGenderPrefix + Integer.toString(optimalGenderIndex + 1));
-
-            m_optimalGenderQueue.add(optimalGenderName);
-
-            LinkedList<String> otherGenderToProposeToInPreferenceOrder = new LinkedList<String>();
-
-            for (int otherGenderIndex = 0; otherGenderIndex < m_numberOfColumns; ++otherGenderIndex) {
-                String otherGenderName = new String(m_otherGenderPrefix +
-                        Integer.toString(optimalGenderDataSet2DArray[optimalGenderIndex][otherGenderIndex]));
-                otherGenderToProposeToInPreferenceOrder.add(otherGenderName);
-            }
-
-            m_optimalGenderProposalList.put(optimalGenderName, otherGenderToProposeToInPreferenceOrder);
-        }
-
-        for (int otherGenderIndex = 0; otherGenderIndex < m_numberOfRows; ++otherGenderIndex) {
-            String otherGenderName = new String(m_otherGenderPrefix + Integer.toString(otherGenderIndex + 1));
-
-            LinkedList<String> optimalGenderInPreferenceOrder = new LinkedList<String>();
-
-            for (int optimalGenderIndex = 0; optimalGenderIndex < m_numberOfColumns; ++optimalGenderIndex) {
-                String optimalGenderName = new String(m_optimalGenderPrefix +
-                        Integer.toString(otherGenderDataSet2DArray[otherGenderIndex][optimalGenderIndex]));
-                optimalGenderInPreferenceOrder.add(optimalGenderName);
-            }
-
-            m_otherGenderPreferenceHashMap.put(otherGenderName, optimalGenderInPreferenceOrder);
-        }
-
+        // Initialize preference Matrix
         m_rankingMatrix = new MatrixPair[m_numberOfRows][m_numberOfRows];
 
         for (int optimalGenderIndex = 0; optimalGenderIndex < m_numberOfRows; ++optimalGenderIndex) {
@@ -103,33 +60,75 @@ public class RankingMatrix {
             System.out.println(" ");
         }
 
+    }
+
+    public void findStableMatching()
+    {
         int[] increasingArray = new int[m_numberOfRows];
         // Creation of root array to generate random permutations off of.
         for (int increasingIndex = 0; increasingIndex < m_numberOfRows; ++increasingIndex) {
             increasingArray[increasingIndex] = increasingIndex;
         }
 
+        int[] permutatedArray;
+        int[] matchesByColumn;
+
+        do {
 //      Compute M(R_i)
-        int[] permutatedArray = randomPermutation(increasingArray, m_numberOfColumns);
-        int[] tranposedIndices = new int[m_numberOfRows];
+            permutatedArray = randomPermutation(increasingArray, m_numberOfColumns);
+            matchesByColumn = getMatchesbyColumn(permutatedArray);
 
-//        TODO:Remove print
-        System.out.println("Permutated Vector");
-        for (int item : permutatedArray) {
-            System.out.println(Integer.toString(item) + " ");
+            updateCurrentMatching(permutatedArray);
+
+
+            int iterationCounter = 0;
+
+            do {
+
+                HashMap<String, LinkedList<MatrixCoordinate>> unstablePairsPerRow = GetUnstablePairsPerRow(permutatedArray, matchesByColumn);
+
+                //TODO: Remove
+                System.out.println("Found " + "unstable pairs");
+                for (String row : unstablePairsPerRow.keySet()) {
+                    for (MatrixCoordinate pair : unstablePairsPerRow.get(row)) {
+                        System.out.println(pair.toString());
+                    }
+                }
+
+                LinkedList<MatrixCoordinate> nm1_pairs = getNm1_Pairs(unstablePairsPerRow);
+
+                LinkedList<MatrixCoordinate> nm2_pairs = getNm2_Pairs(nm1_pairs, matchesByColumn, permutatedArray);
+
+                LinkedList<MatrixCoordinate> nm_pairs = new LinkedList<MatrixCoordinate>();
+                nm_pairs.addAll(nm1_pairs);
+                nm_pairs.addAll(nm2_pairs);
+
+                //TODO:remove print
+                System.out.println("nm_pairs");
+                for (MatrixCoordinate nm_pair : nm_pairs) {
+                    //TODO: Remove print
+                    System.out.println(nm_pair.toString());
+                }
+
+                permutatedArray = iterateMatching(permutatedArray, nm1_pairs);
+                matchesByColumn = getMatchesbyColumn(permutatedArray);
+                updateCurrentMatching(permutatedArray);
+            }while(!GetUnstablePairsPerRow(permutatedArray, matchesByColumn).isEmpty() && (++iterationCounter<m_numberOfColumns*3));
+        }while(!GetUnstablePairsPerRow(permutatedArray, matchesByColumn).isEmpty());
+    }
+
+    private int[] iterateMatching(int[] previousMatching, LinkedList<MatrixCoordinate> nm_pairs)
+    {
+        for (MatrixCoordinate new_pair: nm_pairs)
+        {
+            previousMatching[new_pair.getI()]= new_pair.getJ();
         }
 
-//        Comput M(C_J)
-        for (int index = 0; index < m_numberOfRows; ++index) {
-            tranposedIndices[permutatedArray[index]] = index;
-        }
+        return previousMatching;
+    }
 
-//        TODO:Remove Print
-        System.out.println("Column-based Match Vector");
-        for (int item : tranposedIndices) {
-            System.out.println(Integer.toString(item) + " ");
-        }
-
+    private HashMap<String, LinkedList<MatrixCoordinate>> GetUnstablePairsPerRow(int[] permutatedArray, int[] tranposedIndices)
+    {
         HashMap<String, LinkedList<MatrixCoordinate>> unstablePairsPerRow = new HashMap<String, LinkedList<MatrixCoordinate>>();
 
         // Unstable pair detection.
@@ -152,34 +151,7 @@ public class RankingMatrix {
                 }
             }
         }
-
-        //TODO: Remove
-        System.out.println("Found " + "unstable pairs");
-        for (String row : unstablePairsPerRow.keySet()) {
-            for (MatrixCoordinate pair : unstablePairsPerRow.get(row)) {
-                System.out.println(Integer.toString(pair.getI()) + "," + Integer.toString(pair.getJ()));
-            }
-        }
-
-        LinkedList<MatrixCoordinate> nm1_pairs = getNm1_Pairs(unstablePairsPerRow);
-
-        LinkedList<MatrixCoordinate> nm2_pairs = getNm2_Pairs(nm1_pairs, tranposedIndices, permutatedArray);
-
-        LinkedList<MatrixCoordinate> nm_pairs = new LinkedList<MatrixCoordinate>();
-        for (MatrixCoordinate nm1_pair : nm1_pairs) {
-            for (MatrixCoordinate nm2_pair : nm2_pairs) {
-                if ((nm1_pair.getI() == nm2_pair.getI()) && (nm1_pair.getJ() == nm2_pair.getJ())) {
-                    nm_pairs.add(nm1_pair);
-                }
-            }
-        }
-
-        //TODO:remove print
-        System.out.println("nm_pairs");
-        for (MatrixCoordinate nm_pair : nm_pairs) {
-            //TODO: Remove print
-            System.out.println(nm_pair.toString());
-        }
+        return unstablePairsPerRow;
     }
 
     private LinkedList<MatrixCoordinate> getNm1_Pairs(HashMap<String, LinkedList<MatrixCoordinate>> unstablePairsPerRow)
@@ -228,6 +200,7 @@ public class RankingMatrix {
                 //Establish relationship from Matching pairs to nm2-pair
                 MatrixCoordinate matching1 = new MatrixCoordinate(tranposedIndices[nm1_pair.getJ()], nm1_pair.getJ());
                 MatrixCoordinate matching2 = new MatrixCoordinate(nm1_pair.getI(), permutatedArray[nm1_pair.getI()]);
+                System.out.println("CounterNode Found at " + nm2_counter.toString());
                 String counterName = nm2_counter.toString();
                 String m1St = matching1.toString();
                 String m2St = matching2.toString();
@@ -334,11 +307,18 @@ public class RankingMatrix {
                     chain.add(edgesName);
                     chain = FindChain(chain, nm2_edges, edgesName);
                     MatrixCoordinate firstInChain = new MatrixCoordinate(getI_fromString(chain.getFirst()), getJ_fromString(chain.getFirst()));
-                    MatrixCoordinate lastInChain = new MatrixCoordinate(getI_fromString(chain.getFirst()), getJ_fromString(chain.getFirst()));
+                    MatrixCoordinate lastInChain = new MatrixCoordinate(getI_fromString(chain.getLast()), getJ_fromString(chain.getFirst()));
                     chainHistory.add(chain.getFirst());
                     chainHistory.add(chain.getLast());
 
+
                     System.out.println("First node in chain " + firstInChain.toString());
+                    for (String node:chain
+                         ) {
+                        System.out.println(node);
+
+                    }
+
                     System.out.println("Last node in chain " + lastInChain.toString());
 
                     boolean rowEnd = true;
@@ -381,11 +361,11 @@ public class RankingMatrix {
     }
 
     public int getI_fromString(String s) {
-        return Integer.parseInt(s.split(",")[0]);
+        return Integer.parseInt(s.substring(1,s.length()-1).split(",")[0]);
     }
 
     public int getJ_fromString(String s) {
-        return Integer.parseInt(s.split(",")[1]);
+        return Integer.parseInt(s.substring(1,s.length()-1).split(",")[1]);
     }
 
 
@@ -449,100 +429,37 @@ public class RankingMatrix {
         return a;
     }
 
-    public boolean isOptimalGenderQueueEmpty()
+    private int[] getMatchesbyColumn(int[] matchesByRow)
     {
-        return m_optimalGenderQueue.isEmpty();
+        int[] matchesbyColumn= new int[m_numberOfRows];
+        //        Comput M(C_j)
+        for (int index = 0; index < m_numberOfRows; ++index) {
+            matchesbyColumn[matchesByRow[index]] = index;
+        }
+        return matchesbyColumn;
     }
 
-    public String dequeueOptimalPerson()
+    private void updateCurrentMatching(int[] matchingVec)
     {
-        return m_optimalGenderQueue.remove();
-    }
-
-    public void enqueueOptimalGenderPerson(String optimalPerson)
-    {
-        m_optimalGenderQueue.add(optimalPerson);
-    }
-
-    public String getNextMostPreferredOtherGender(String optimalGender)
-    {
-        return m_optimalGenderProposalList.get(optimalGender).remove();
-    }
-
-    public void engageOtherGenderToOptimalGender(String otherGender, String optimalGender)
-    {
-        m_otherGenderEngagementPartner.put(otherGender, optimalGender);
-    }
-
-    public boolean isOtherGenderEngaged(String otherGender)
-    {
-        return m_otherGenderEngagementPartner.containsKey(otherGender);
-    }
-
-    public String dumpCurrentFiance(String otherGender)
-    {
-        String currentFiance;
-        currentFiance = m_otherGenderEngagementPartner.get(otherGender);
-        m_otherGenderEngagementPartner.remove(otherGender);
-        return currentFiance;
-    }
-
-    public boolean doesOtherGenderPreferCurrentFianceOverOptimalChoice(String otherEngagedGender, String optimalGender)
-    {
-        // get currently engaged optimal gender
-        String currentFiance = m_otherGenderEngagementPartner.get(otherEngagedGender);
-
-        LinkedList<String> currentOtherGenderPreferenceList = m_otherGenderPreferenceHashMap.get(otherEngagedGender);
-
-        // since we are using a stack and things are pushed in order, then we can use the indices to figure out
-        // the preference
-        Integer indexOfCurrentFiance = currentOtherGenderPreferenceList.indexOf(currentFiance);
-        Integer indexOfOptimalGender = currentOtherGenderPreferenceList.indexOf(optimalGender);
-        return indexOfCurrentFiance < indexOfOptimalGender;
+            for(int i = 0; i < m_numberOfRows; ++i)
+            {
+                m_currentMatching[i] = matchingVec[i];
+            }
     }
 
     public String getFinalMatchingGraphToString()
     {
         String matches = new String();
 
-        HashMap<Integer, Integer> orderedFinalMatching = new HashMap<Integer, Integer>();
-
-        // Arrange output to follow results given from TA
-        for (String otherGender: m_otherGenderEngagementPartner.keySet())
-        {
-            String optimalGender = m_otherGenderEngagementPartner.get(otherGender);
-
-            // use .substring(1) to remove first non-digit characters i.e. just leave the integers
-            orderedFinalMatching.put(Integer.parseInt(new String(optimalGender.substring(1))),
-                    Integer.parseInt(new String(otherGender.substring(1))));
-        }
-
-        for(int i = 0; i < orderedFinalMatching.size(); ++i)
+        for(int i = 0; i < m_currentMatching.length; ++i)
         {
             Integer currentOptimalGenderIndex = i + 1;
-            matches += "(" + currentOptimalGenderIndex;
-            matches += "," + orderedFinalMatching.get(currentOptimalGenderIndex);
+            matches += "(" + (currentOptimalGenderIndex);
+            matches += "," + m_currentMatching[currentOptimalGenderIndex-1];
             matches += ")\n";
         }
 
         return matches;
-    }
-
-    public void writeFinalMatchingToFile(String outputFileName)
-    {
-        String outputStr = this.getFinalMatchingGraphToString();
-
-        try
-        {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFileName));
-            writer.write(outputStr);
-            writer.close();
-        }
-        catch (Exception e)
-        {
-            System.out.println("Exception While Writing To File: " + e.toString());
-            System.exit(-100);
-        }
     }
 
 
