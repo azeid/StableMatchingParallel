@@ -1,0 +1,2442 @@
+/usr/lib/jvm/java-8-openjdk-amd64/bin/java "-javaagent:/lib/idea_rt.jar=42799:/bin" -Dfile.encoding=UTF-8 -classpath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/cldrdata.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/dnsns.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/icedtea-sound.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/jaccess.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/localedata.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/nashorn.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunec.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunjce_provider.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/sunpkcs11.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/ext/zipfs.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/management-agent.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/home/gleon/Projects/StableMatchingParallel/target/test-classes:/home/gleon/Projects/StableMatchingParallel/target/classes:/home/gleon/.m2/repository/org/openjdk/jmh/jmh-core/1.21/jmh-core-1.21.jar:/home/gleon/.m2/repository/net/sf/jopt-simple/jopt-simple/4.6/jopt-simple-4.6.jar:/home/gleon/.m2/repository/org/apache/commons/commons-math3/3.2/commons-math3-3.2.jar:/home/gleon/.m2/repository/org/openjdk/jmh/jmh-generator-annprocess/1.21/jmh-generator-annprocess-1.21.jar bench.BenchmarkRunner
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/BestCase_10.txt)
+
+# Run progress: 0.00% complete, ETA 00:39:00
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.175 ms/op
+# Warmup Iteration   2: 0.165 ms/op
+# Warmup Iteration   3: 0.165 ms/op
+Iteration   1: 0.166 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.166 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.167 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.163 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.162 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  0.165 ±(99.9%) 0.008 ms/op [Average]
+  (min, avg, max) = (0.162, 0.165, 0.167), stdev = 0.002
+  CI (99.9%): [0.156, 0.173] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 63.0%         RUNNABLE
+ 29.6%         TIMED_WAITING
+  7.4%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 23.3%  36.9% java.net.SocketInputStream.socketRead0
+ 15.3%  24.3% <stack is empty, everything is filtered?>
+  6.5%  10.3% sun.misc.Unsafe.unpark
+  5.5%   8.7% java.security.AccessController.getStackAccessControlContext
+  3.4%   5.4% sun.misc.Unsafe.park
+  2.6%   4.2% java.lang.Thread.start0
+  1.4%   2.3% java.lang.Throwable.fillInStackTrace
+  1.3%   2.0% smp.SMPDivideAndConquerImproved.concatenate1DArray
+  1.1%   1.8% java.lang.Thread.isInterrupted
+  0.7%   1.1% smp.SMPDivideAndConquerImproved.chunkArray
+  1.9%   3.0% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 29.6% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  7.4% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/BestCase_100.txt)
+
+# Run progress: 2.78% complete, ETA 00:38:18
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.805 ms/op
+# Warmup Iteration   2: 0.713 ms/op
+# Warmup Iteration   3: 0.707 ms/op
+Iteration   1: 0.699 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.694 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.701 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.714 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.704 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  0.702 ±(99.9%) 0.029 ms/op [Average]
+  (min, avg, max) = (0.694, 0.702, 0.714), stdev = 0.008
+  CI (99.9%): [0.673, 0.731] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.4%         RUNNABLE
+ 35.5%         TIMED_WAITING
+  3.1%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 24.3%  39.6% java.net.SocketInputStream.socketRead0
+  7.4%  12.1% sun.misc.Unsafe.unpark
+  7.0%  11.4% smp.SMPDivideAndConquerImproved.<init>
+  6.4%  10.4% <stack is empty, everything is filtered?>
+  6.3%  10.2% sun.misc.Unsafe.park
+  3.8%   6.2% java.util.HashMap.putVal
+  1.7%   2.7% java.security.AccessController.getStackAccessControlContext
+  1.0%   1.6% java.lang.Thread.start0
+  0.8%   1.4% java.util.HashMap.resize
+  0.5%   0.7% smp.SMPDivideAndConquerImproved.concatenate1DArray
+  2.3%   3.8% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 35.5% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  3.1% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/BestCase_200.txt)
+
+# Run progress: 5.56% complete, ETA 00:37:12
+# Fork: 1 of 1
+# Warmup Iteration   1: 2.402 ms/op
+# Warmup Iteration   2: 2.184 ms/op
+# Warmup Iteration   3: 2.187 ms/op
+Iteration   1: 2.176 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 2.199 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 2.205 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 2.209 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 2.206 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  2.199 ±(99.9%) 0.052 ms/op [Average]
+  (min, avg, max) = (2.176, 2.199, 2.209), stdev = 0.013
+  CI (99.9%): [2.148, 2.251] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 71.7%         RUNNABLE
+ 26.9%         TIMED_WAITING
+  1.5%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 30.6%  42.7% java.net.SocketInputStream.socketRead0
+ 15.1%  21.1% smp.SMPDivideAndConquerImproved.<init>
+  6.0%   8.4% sun.misc.Unsafe.park
+  5.9%   8.2% java.util.HashMap.putVal
+  5.8%   8.0% sun.misc.Unsafe.unpark
+  4.2%   5.8% <stack is empty, everything is filtered?>
+  1.1%   1.5% java.util.HashMap.resize
+  1.0%   1.4% java.security.AccessController.getStackAccessControlContext
+  0.5%   0.6% java.lang.Thread.start0
+  0.3%   0.5% smp.SMPDivideAndConquerImproved.concatenate1DArray
+  1.3%   1.8% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 26.9% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  1.5% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/BestCase_1000.txt)
+
+# Run progress: 8.33% complete, ETA 00:36:07
+# Fork: 1 of 1
+# Warmup Iteration   1: 60.312 ms/op
+# Warmup Iteration   2: 49.763 ms/op
+# Warmup Iteration   3: 48.749 ms/op
+Iteration   1: 48.795 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 50.001 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 50.534 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 49.427 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 50.290 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  49.809 ±(99.9%) 2.701 ms/op [Average]
+  (min, avg, max) = (48.795, 49.809, 50.534), stdev = 0.701
+  CI (99.9%): [47.108, 52.511] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 91.8%         RUNNABLE
+  7.6%         TIMED_WAITING
+  0.6%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 44.4%  48.4% java.net.SocketInputStream.socketRead0
+ 18.4%  20.0% java.util.HashMap.hash
+ 13.5%  14.8% java.util.HashMap.putVal
+  9.3%  10.1% smp.SMPDivideAndConquerImproved.<init>
+  2.0%   2.2% sun.misc.Unsafe.park
+  1.3%   1.4% sun.misc.Unsafe.unpark
+  0.7%   0.8% <stack is empty, everything is filtered?>
+  0.6%   0.6% java.lang.Integer.valueOf
+  0.3%   0.4% java.util.HashMap.newNode
+  0.2%   0.2% java.util.HashMap.resize
+  1.0%   1.1% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+  7.6% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  0.6% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/Random_10.txt)
+
+# Run progress: 11.11% complete, ETA 00:35:09
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.176 ms/op
+# Warmup Iteration   2: 0.174 ms/op
+# Warmup Iteration   3: 0.170 ms/op
+Iteration   1: 0.170 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.173 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.173 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.170 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.170 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  0.171 ±(99.9%) 0.006 ms/op [Average]
+  (min, avg, max) = (0.170, 0.171, 0.173), stdev = 0.002
+  CI (99.9%): [0.165, 0.177] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 62.2%         RUNNABLE
+ 30.0%         TIMED_WAITING
+  7.8%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 23.2%  37.3% java.net.SocketInputStream.socketRead0
+ 15.0%  24.0% <stack is empty, everything is filtered?>
+  6.5%  10.5% sun.misc.Unsafe.unpark
+  5.7%   9.1% java.security.AccessController.getStackAccessControlContext
+  3.4%   5.5% sun.misc.Unsafe.park
+  1.9%   3.0% java.lang.Thread.start0
+  1.5%   2.3% smp.SMPDivideAndConquerImproved.concatenate1DArray
+  1.1%   1.8% java.lang.Throwable.fillInStackTrace
+  0.9%   1.4% java.lang.Thread.isInterrupted
+  0.8%   1.3% smp.SMPDivideAndConquerImproved.chunkArray
+  2.3%   3.7% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 30.0% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  7.8% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/Random_100.txt)
+
+# Run progress: 13.89% complete, ETA 00:34:01
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.158 ms/op
+# Warmup Iteration   2: 1.027 ms/op
+# Warmup Iteration   3: 1.010 ms/op
+Iteration   1: 1.017 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 1.020 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 1.007 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 1.015 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 1.021 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  1.016 ±(99.9%) 0.022 ms/op [Average]
+  (min, avg, max) = (1.007, 1.016, 1.021), stdev = 0.006
+  CI (99.9%): [0.994, 1.038] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 58.2%         RUNNABLE
+ 37.4%         TIMED_WAITING
+  4.4%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 24.0%  41.3% java.net.SocketInputStream.socketRead0
+  5.8%   9.9% sun.misc.Unsafe.unpark
+  5.0%   8.6% sun.misc.Unsafe.park
+  4.9%   8.5% <stack is empty, everything is filtered?>
+  4.6%   7.9% java.util.HashMap.hash
+  3.4%   5.9% java.util.HashMap.resize
+  2.6%   4.4% smp.SMPDivideAndConquerImproved.<init>
+  2.5%   4.2% java.util.HashMap.putVal
+  1.3%   2.2% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  1.1%   1.9% java.security.AccessController.getStackAccessControlContext
+  3.1%   5.3% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 37.4% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  4.4% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/Random_200.txt)
+
+# Run progress: 16.67% complete, ETA 00:32:54
+# Fork: 1 of 1
+# Warmup Iteration   1: 3.912 ms/op
+# Warmup Iteration   2: 3.544 ms/op
+# Warmup Iteration   3: 3.528 ms/op
+Iteration   1: 3.533 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 3.494 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 3.540 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 3.510 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 3.533 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  3.522 ±(99.9%) 0.073 ms/op [Average]
+  (min, avg, max) = (3.494, 3.522, 3.540), stdev = 0.019
+  CI (99.9%): [3.449, 3.595] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.6%         RUNNABLE
+ 34.6%         TIMED_WAITING
+  3.8%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 26.5%  43.0% java.net.SocketInputStream.socketRead0
+  7.6%  12.3% java.util.HashMap.hash
+  4.7%   7.6% sun.misc.Unsafe.park
+  4.6%   7.4% sun.misc.Unsafe.unpark
+  4.3%   7.0% java.util.HashMap.resize
+  3.4%   5.5% <stack is empty, everything is filtered?>
+  3.0%   4.9% java.util.HashMap.putVal
+  2.9%   4.7% smp.SMPDivideAndConquerImproved.<init>
+  1.6%   2.5% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  0.9%   1.4% java.security.AccessController.getStackAccessControlContext
+  2.3%   3.7% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 34.6% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  3.8% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/Random_1000.txt)
+
+# Run progress: 19.44% complete, ETA 00:31:48
+# Fork: 1 of 1
+# Warmup Iteration   1: 83.697 ms/op
+# Warmup Iteration   2: 74.110 ms/op
+# Warmup Iteration   3: 74.415 ms/op
+Iteration   1: 75.098 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 75.556 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 75.354 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 74.719 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 74.952 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  75.136 ±(99.9%) 1.266 ms/op [Average]
+  (min, avg, max) = (74.719, 75.136, 75.556), stdev = 0.329
+  CI (99.9%): [73.870, 76.402] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 80.3%         RUNNABLE
+ 17.8%         TIMED_WAITING
+  1.9%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 39.0%  48.6% java.net.SocketInputStream.socketRead0
+ 18.1%  22.5% java.util.HashMap.put
+ 10.4%  13.0% java.util.HashMap.resize
+  7.3%   9.1% java.util.HashMap.putVal
+  1.3%   1.6% sun.misc.Unsafe.park
+  1.3%   1.6% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  0.8%   1.0% sun.misc.Unsafe.unpark
+  0.4%   0.5% <stack is empty, everything is filtered?>
+  0.4%   0.5% java.util.HashMap.hash
+  0.3%   0.4% java.lang.Integer.valueOf
+  1.0%   1.2% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 17.8% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  1.9% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/WorstCase_10.txt)
+
+# Run progress: 22.22% complete, ETA 00:30:46
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.178 ms/op
+# Warmup Iteration   2: 0.174 ms/op
+# Warmup Iteration   3: 0.177 ms/op
+Iteration   1: 0.173 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.177 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.173 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.169 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.176 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  0.174 ±(99.9%) 0.011 ms/op [Average]
+  (min, avg, max) = (0.169, 0.174, 0.177), stdev = 0.003
+  CI (99.9%): [0.162, 0.185] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.6%         RUNNABLE
+ 30.7%         TIMED_WAITING
+  7.7%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 23.0%  37.3% java.net.SocketInputStream.socketRead0
+ 14.4%  23.4% <stack is empty, everything is filtered?>
+  7.2%  11.6% sun.misc.Unsafe.unpark
+  4.9%   7.9% java.security.AccessController.getStackAccessControlContext
+  3.2%   5.1% sun.misc.Unsafe.park
+  2.6%   4.3% java.lang.Thread.start0
+  1.3%   2.1% smp.SMPDivideAndConquerImproved.concatenate1DArray
+  1.2%   1.9% java.lang.Throwable.fillInStackTrace
+  1.1%   1.8% java.lang.Thread.isInterrupted
+  0.7%   1.2% smp.SMPDivideAndConquerImproved.chunkArray
+  2.0%   3.3% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 30.7% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  7.7% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/WorstCase_100.txt)
+
+# Run progress: 25.00% complete, ETA 00:29:39
+# Fork: 1 of 1
+# Warmup Iteration   1: 2.185 ms/op
+# Warmup Iteration   2: 2.066 ms/op
+# Warmup Iteration   3: 2.048 ms/op
+Iteration   1: 2.005 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 2.010 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 2.015 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 2.020 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 2.010 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  2.012 ±(99.9%) 0.022 ms/op [Average]
+  (min, avg, max) = (2.005, 2.012, 2.020), stdev = 0.006
+  CI (99.9%): [1.990, 2.034] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 53.5%         TIMED_WAITING
+ 36.8%         RUNNABLE
+  9.7%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 53.5% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 16.4%  44.5% java.net.SocketInputStream.socketRead0
+  8.4%  22.7% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  2.4%   6.6% java.util.HashMap.hash
+  2.0%   5.5% <stack is empty, everything is filtered?>
+  2.0%   5.4% sun.misc.Unsafe.unpark
+  1.7%   4.7% sun.misc.Unsafe.park
+  0.9%   2.5% java.util.HashMap.putVal
+  0.8%   2.1% smp.SMPDivideAndConquerImproved.<init>
+  0.5%   1.4% java.security.AccessController.getStackAccessControlContext
+  0.4%   1.0% java.lang.Thread.start0
+  1.3%   3.7% <other>
+
+....[Thread state: WAITING].........................................................................
+  9.7% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/WorstCase_200.txt)
+
+# Run progress: 27.78% complete, ETA 00:28:32
+# Fork: 1 of 1
+# Warmup Iteration   1: 9.112 ms/op
+# Warmup Iteration   2: 8.521 ms/op
+# Warmup Iteration   3: 8.489 ms/op
+Iteration   1: 8.561 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 8.516 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 8.599 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 8.499 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 8.521 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  8.539 ±(99.9%) 0.155 ms/op [Average]
+  (min, avg, max) = (8.499, 8.539, 8.599), stdev = 0.040
+  CI (99.9%): [8.384, 8.694] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 57.9%         TIMED_WAITING
+ 31.2%         RUNNABLE
+ 10.9%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 57.9% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 14.8%  47.5% java.net.SocketInputStream.socketRead0
+  9.6%  30.7% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  2.0%   6.3% java.util.HashMap.hash
+  1.1%   3.5% java.util.HashMap.putVal
+  0.9%   2.9% sun.misc.Unsafe.park
+  0.9%   2.7% sun.misc.Unsafe.unpark
+  0.7%   2.3% smp.SMPDivideAndConquerImproved.<init>
+  0.5%   1.7% <stack is empty, everything is filtered?>
+  0.2%   0.5% java.util.HashMap.resize
+  0.2%   0.5% java.security.AccessController.getStackAccessControlContext
+  0.4%   1.3% <other>
+
+....[Thread state: WAITING].........................................................................
+ 10.9% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.divideAndConquerCallable
+# Parameters: (fileName = testCases/WorstCase_1000.txt)
+
+# Run progress: 30.56% complete, ETA 00:27:26
+# Fork: 1 of 1
+# Warmup Iteration   1: 432.214 ms/op
+# Warmup Iteration   2: 402.823 ms/op
+# Warmup Iteration   3: 397.394 ms/op
+Iteration   1: 398.708 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 395.547 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 400.621 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 397.195 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 396.797 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.divideAndConquerCallable":
+  397.773 ±(99.9%) 7.513 ms/op [Average]
+  (min, avg, max) = (395.547, 397.773, 400.621), stdev = 1.951
+  CI (99.9%): [390.260, 405.286] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.divideAndConquerCallable:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 68.4%         TIMED_WAITING
+ 22.0%         RUNNABLE
+  9.6%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 68.4% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 10.9%  49.8% java.net.SocketInputStream.socketRead0
+  9.0%  40.9% smp.SMPDivideAndConquerImproved$MergeTwoMatchingSets.matchAndAdvanceConflictsIfFound
+  0.8%   3.6% java.util.HashMap.putVal
+  0.7%   3.3% java.util.HashMap.hash
+  0.3%   1.2% smp.SMPDivideAndConquerImproved.<init>
+  0.1%   0.4% java.lang.Integer.valueOf
+  0.0%   0.2% sun.misc.Unsafe.park
+  0.0%   0.2% sun.misc.Unsafe.unpark
+  0.0%   0.1% <stack is empty, everything is filtered?>
+  0.0%   0.0% java.security.AccessController.getStackAccessControlContext
+  0.0%   0.2% <other>
+
+....[Thread state: WAITING].........................................................................
+  9.6% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/BestCase_10.txt)
+
+# Run progress: 33.33% complete, ETA 00:26:25
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.188 ms/op
+# Warmup Iteration   2: 0.178 ms/op
+# Warmup Iteration   3: 0.178 ms/op
+Iteration   1: 0.175 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.178 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.174 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.180 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.177 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.177 ±(99.9%) 0.010 ms/op [Average]
+  (min, avg, max) = (0.174, 0.177, 0.180), stdev = 0.003
+  CI (99.9%): [0.167, 0.187] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 68.0%         RUNNABLE
+ 28.7%         TIMED_WAITING
+  3.3%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 22.4%  33.0% java.net.SocketInputStream.socketRead0
+ 17.6%  25.9% <stack is empty, everything is filtered?>
+  7.8%  11.4% sun.misc.Unsafe.unpark
+  6.1%   9.0% java.security.AccessController.getStackAccessControlContext
+  2.7%   4.0% sun.misc.Unsafe.park
+  2.6%   3.8% java.lang.Thread.start0
+  1.9%   2.8% java.lang.Throwable.fillInStackTrace
+  1.4%   2.0% java.lang.Object.<init>
+  1.3%   1.9% java.lang.Thread.isInterrupted
+  1.1%   1.5% java.util.concurrent.SynchronousQueue$TransferStack.snode
+  3.2%   4.6% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 28.7% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  3.3% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/BestCase_100.txt)
+
+# Run progress: 36.11% complete, ETA 00:25:18
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.433 ms/op
+# Warmup Iteration   2: 0.376 ms/op
+# Warmup Iteration   3: 0.385 ms/op
+Iteration   1: 0.378 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.373 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.371 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.369 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.370 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.372 ±(99.9%) 0.013 ms/op [Average]
+  (min, avg, max) = (0.369, 0.372, 0.378), stdev = 0.003
+  CI (99.9%): [0.359, 0.386] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 62.1%         RUNNABLE
+ 35.5%         TIMED_WAITING
+  2.4%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 21.5%  34.7% java.net.SocketInputStream.socketRead0
+  9.6%  15.5% sun.misc.Unsafe.unpark
+  9.3%  14.9% <stack is empty, everything is filtered?>
+  8.0%  12.8% sun.misc.Unsafe.park
+  2.1%   3.4% java.util.regex.Pattern$BmpCharProperty.match
+  2.1%   3.4% java.security.AccessController.getStackAccessControlContext
+  1.9%   3.0% java.lang.Thread.start0
+  0.9%   1.4% java.util.Formatter$FormatSpecifier.<init>
+  0.8%   1.3% java.lang.Throwable.fillInStackTrace
+  0.8%   1.2% java.util.Formatter$FormatSpecifier.print
+  5.2%   8.3% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 35.5% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  2.4% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/BestCase_200.txt)
+
+# Run progress: 38.89% complete, ETA 00:24:12
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.642 ms/op
+# Warmup Iteration   2: 0.592 ms/op
+# Warmup Iteration   3: 0.582 ms/op
+Iteration   1: 0.581 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.558 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.557 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.573 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.570 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.568 ±(99.9%) 0.038 ms/op [Average]
+  (min, avg, max) = (0.557, 0.568, 0.581), stdev = 0.010
+  CI (99.9%): [0.529, 0.606] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.4%         RUNNABLE
+ 37.1%         TIMED_WAITING
+  1.5%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 21.5%  35.0% java.net.SocketInputStream.socketRead0
+ 10.8%  17.5% sun.misc.Unsafe.park
+ 10.2%  16.6% sun.misc.Unsafe.unpark
+  6.0%   9.8% <stack is empty, everything is filtered?>
+  2.7%   4.4% java.util.regex.Pattern$BmpCharProperty.match
+  1.7%   2.8% java.security.AccessController.getStackAccessControlContext
+  1.6%   2.6% java.util.Formatter$FormatSpecifier.print
+  1.5%   2.4% java.util.Formatter$FormatSpecifier.<init>
+  0.8%   1.3% java.lang.Thread.start0
+  0.6%   1.0% java.util.concurrent.SynchronousQueue$TransferStack.snode
+  4.1%   6.6% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 37.1% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  1.5% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/BestCase_1000.txt)
+
+# Run progress: 41.67% complete, ETA 00:23:05
+# Fork: 1 of 1
+# Warmup Iteration   1: 2.410 ms/op
+# Warmup Iteration   2: 2.244 ms/op
+# Warmup Iteration   3: 2.256 ms/op
+Iteration   1: 2.222 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 2.176 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 2.178 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 2.177 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 2.174 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  2.185 ±(99.9%) 0.078 ms/op [Average]
+  (min, avg, max) = (2.174, 2.185, 2.222), stdev = 0.020
+  CI (99.9%): [2.107, 2.264] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 57.8%         RUNNABLE
+ 41.8%         TIMED_WAITING
+  0.3%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 20.3%  35.0% java.net.SocketInputStream.socketRead0
+ 12.6%  21.9% sun.misc.Unsafe.park
+  9.9%  17.1% sun.misc.Unsafe.unpark
+  3.3%   5.7% java.util.regex.Pattern$BmpCharProperty.match
+  2.6%   4.4% <stack is empty, everything is filtered?>
+  2.0%   3.4% java.util.Formatter$FormatSpecifier.print
+  1.7%   3.0% java.util.Formatter$FormatSpecifier.<init>
+  0.8%   1.5% java.security.AccessController.getStackAccessControlContext
+  0.8%   1.3% java.util.concurrent.SynchronousQueue$TransferStack.snode
+  0.6%   1.0% smp.ParallelGaleShapley$Worker.run
+  3.3%   5.6% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 41.8% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  0.3% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/Random_10.txt)
+
+# Run progress: 44.44% complete, ETA 00:22:00
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.185 ms/op
+# Warmup Iteration   2: 0.177 ms/op
+# Warmup Iteration   3: 0.175 ms/op
+Iteration   1: 0.179 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.177 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.176 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.180 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.175 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.177 ±(99.9%) 0.007 ms/op [Average]
+  (min, avg, max) = (0.175, 0.177, 0.180), stdev = 0.002
+  CI (99.9%): [0.170, 0.185] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 67.5%         RUNNABLE
+ 28.5%         TIMED_WAITING
+  4.0%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 22.1%  32.7% java.net.SocketInputStream.socketRead0
+ 17.7%  26.3% <stack is empty, everything is filtered?>
+  7.7%  11.3% sun.misc.Unsafe.unpark
+  6.0%   8.8% java.security.AccessController.getStackAccessControlContext
+  2.8%   4.2% sun.misc.Unsafe.park
+  2.6%   3.8% java.lang.Thread.start0
+  2.1%   3.1% java.lang.Throwable.fillInStackTrace
+  1.4%   2.1% java.lang.Thread.isInterrupted
+  1.3%   1.9% java.lang.Object.<init>
+  0.8%   1.2% java.util.concurrent.SynchronousQueue$TransferStack.snode
+  3.1%   4.6% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 28.5% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  4.0% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/Random_100.txt)
+
+# Run progress: 47.22% complete, ETA 00:20:54
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.433 ms/op
+# Warmup Iteration   2: 0.382 ms/op
+# Warmup Iteration   3: 0.375 ms/op
+Iteration   1: 0.382 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.387 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.385 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.394 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.388 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.387 ±(99.9%) 0.018 ms/op [Average]
+  (min, avg, max) = (0.382, 0.387, 0.394), stdev = 0.005
+  CI (99.9%): [0.370, 0.405] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 66.9%         RUNNABLE
+ 30.4%         TIMED_WAITING
+  2.6%         WAITING
+  0.1%         BLOCKED
+
+....[Thread state: RUNNABLE]........................................................................
+ 21.6%  32.3% java.net.SocketInputStream.socketRead0
+  9.7%  14.5% sun.misc.Unsafe.park
+  9.1%  13.6% <stack is empty, everything is filtered?>
+  7.8%  11.7% sun.misc.Unsafe.unpark
+  3.8%   5.6% java.security.AccessController.getStackAccessControlContext
+  2.0%   3.0% java.util.regex.Pattern$BmpCharProperty.match
+  1.7%   2.5% smp.ParallelGaleShapley$Worker.run
+  1.6%   2.3% java.lang.Thread.start0
+  1.3%   2.0% java.util.Formatter$FormatSpecifier.print
+  1.3%   1.9% java.util.concurrent.ConcurrentLinkedQueue.offer
+  7.0%  10.5% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 30.4% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  2.6% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: BLOCKED].........................................................................
+  0.1% 100.0% smp.ParallelGaleShapley$Worker.run
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/Random_200.txt)
+
+# Run progress: 50.00% complete, ETA 00:19:47
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.910 ms/op
+# Warmup Iteration   2: 0.749 ms/op
+# Warmup Iteration   3: 0.743 ms/op
+Iteration   1: 0.729 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.729 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.725 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.727 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.728 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.727 ±(99.9%) 0.007 ms/op [Average]
+  (min, avg, max) = (0.725, 0.727, 0.729), stdev = 0.002
+  CI (99.9%): [0.721, 0.734] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.6%         RUNNABLE
+ 34.2%         TIMED_WAITING
+  3.5%         WAITING
+  0.7%         BLOCKED
+
+....[Thread state: RUNNABLE]........................................................................
+ 15.5%  25.2% java.net.SocketInputStream.socketRead0
+ 10.3%  16.7% sun.misc.Unsafe.park
+  6.6%  10.8% smp.ParallelGaleShapley$Worker.run
+  6.0%   9.7% sun.misc.Unsafe.unpark
+  6.0%   9.7% java.util.concurrent.ConcurrentLinkedQueue.offer
+  5.7%   9.2% <stack is empty, everything is filtered?>
+  2.7%   4.3% java.security.AccessController.getStackAccessControlContext
+  1.5%   2.5% java.util.regex.Pattern$BmpCharProperty.match
+  1.1%   1.7% java.lang.Thread.start0
+  0.9%   1.5% java.util.concurrent.ConcurrentLinkedQueue.poll
+  5.4%   8.8% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 34.2% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  3.5% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: BLOCKED].........................................................................
+  0.7% 100.0% smp.ParallelGaleShapley$Worker.run
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/Random_1000.txt)
+
+# Run progress: 52.78% complete, ETA 00:18:41
+# Fork: 1 of 1
+# Warmup Iteration   1: 3.995 ms/op
+# Warmup Iteration   2: 3.838 ms/op
+# Warmup Iteration   3: 3.969 ms/op
+Iteration   1: 3.828 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 3.790 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 3.789 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 3.810 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 3.841 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  3.811 ±(99.9%) 0.089 ms/op [Average]
+  (min, avg, max) = (3.789, 3.811, 3.841), stdev = 0.023
+  CI (99.9%): [3.723, 3.900] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 55.8%         RUNNABLE
+ 42.9%         TIMED_WAITING
+  0.9%         WAITING
+  0.3%         BLOCKED
+
+....[Thread state: RUNNABLE]........................................................................
+ 17.1%  30.7% java.util.concurrent.ConcurrentLinkedQueue.offer
+  9.2%  16.6% smp.ParallelGaleShapley$Worker.run
+  8.7%  15.6% java.net.SocketInputStream.socketRead0
+  5.2%   9.3% sun.misc.Unsafe.park
+  5.1%   9.1% sun.misc.Unsafe.unpark
+  4.8%   8.6% <stack is empty, everything is filtered?>
+  1.7%   3.0% java.util.concurrent.ConcurrentLinkedQueue.poll
+  1.1%   1.9% java.security.AccessController.getStackAccessControlContext
+  0.7%   1.2% java.lang.Thread.start0
+  0.5%   0.8% java.util.regex.Pattern$BmpCharProperty.match
+  1.8%   3.2% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 42.9% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  0.9% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: BLOCKED].........................................................................
+  0.3% 100.0% smp.ParallelGaleShapley$Worker.run
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/WorstCase_10.txt)
+
+# Run progress: 55.56% complete, ETA 00:17:35
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.191 ms/op
+# Warmup Iteration   2: 0.177 ms/op
+# Warmup Iteration   3: 0.180 ms/op
+Iteration   1: 0.184 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.185 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.190 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.181 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.179 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  0.184 ±(99.9%) 0.017 ms/op [Average]
+  (min, avg, max) = (0.179, 0.184, 0.190), stdev = 0.004
+  CI (99.9%): [0.167, 0.200] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 67.2%         RUNNABLE
+ 29.3%         TIMED_WAITING
+  3.5%         WAITING
+
+....[Thread state: RUNNABLE]........................................................................
+ 22.1%  32.8% java.net.SocketInputStream.socketRead0
+ 17.3%  25.8% <stack is empty, everything is filtered?>
+  7.9%  11.7% sun.misc.Unsafe.unpark
+  5.8%   8.7% java.security.AccessController.getStackAccessControlContext
+  2.8%   4.2% sun.misc.Unsafe.park
+  2.6%   3.9% java.lang.Thread.start0
+  2.0%   3.0% java.lang.Throwable.fillInStackTrace
+  1.4%   2.1% java.lang.Thread.isInterrupted
+  1.3%   1.9% java.lang.Object.<init>
+  0.9%   1.4% java.util.concurrent.SynchronousQueue$TransferStack.snode
+  3.1%   4.6% <other>
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 29.3% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: WAITING].........................................................................
+  3.5% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/WorstCase_100.txt)
+
+# Run progress: 58.33% complete, ETA 00:16:29
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.228 ms/op
+# Warmup Iteration   2: 1.127 ms/op
+# Warmup Iteration   3: 1.110 ms/op
+Iteration   1: 1.116 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 1.109 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 1.098 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 1.132 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 1.108 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  1.113 ±(99.9%) 0.048 ms/op [Average]
+  (min, avg, max) = (1.098, 1.113, 1.132), stdev = 0.013
+  CI (99.9%): [1.064, 1.161] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 53.6%         TIMED_WAITING
+ 37.2%         RUNNABLE
+  9.3%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 53.6% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 14.3%  38.5% java.net.SocketInputStream.socketRead0
+  6.6%  17.8% smp.ParallelGaleShapley$Worker.run
+  4.7%  12.6% java.util.concurrent.ConcurrentLinkedQueue.offer
+  2.7%   7.3% <stack is empty, everything is filtered?>
+  2.7%   7.3% sun.misc.Unsafe.unpark
+  2.1%   5.7% sun.misc.Unsafe.park
+  0.9%   2.4% java.security.AccessController.getStackAccessControlContext
+  0.4%   1.1% java.lang.Thread.start0
+  0.4%   1.0% java.lang.Throwable.fillInStackTrace
+  0.3%   0.9% java.util.regex.Pattern$BmpCharProperty.match
+  2.0%   5.5% <other>
+
+....[Thread state: WAITING].........................................................................
+  9.3% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/WorstCase_200.txt)
+
+# Run progress: 61.11% complete, ETA 00:15:23
+# Fork: 1 of 1
+# Warmup Iteration   1: 6.028 ms/op
+# Warmup Iteration   2: 5.746 ms/op
+# Warmup Iteration   3: 5.625 ms/op
+Iteration   1: 5.480 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 5.451 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 5.838 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 5.911 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 5.920 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  5.720 ±(99.9%) 0.904 ms/op [Average]
+  (min, avg, max) = (5.451, 5.720, 5.920), stdev = 0.235
+  CI (99.9%): [4.816, 6.624] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 61.2%         TIMED_WAITING
+ 27.6%         RUNNABLE
+ 11.2%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 61.2% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 12.7%  46.1% java.net.SocketInputStream.socketRead0
+  6.4%  23.2% smp.ParallelGaleShapley$Worker.run
+  5.3%  19.3% java.util.concurrent.ConcurrentLinkedQueue.offer
+  0.7%   2.5% sun.misc.Unsafe.unpark
+  0.6%   2.3% sun.misc.Unsafe.park
+  0.6%   2.1% <stack is empty, everything is filtered?>
+  0.2%   0.9% java.security.AccessController.getStackAccessControlContext
+  0.2%   0.6% java.util.regex.Pattern$BmpCharProperty.match
+  0.1%   0.5% java.util.Formatter$FormatSpecifier.print
+  0.1%   0.3% java.lang.Integer.valueOf
+  0.6%   2.2% <other>
+
+....[Thread state: WAITING].........................................................................
+ 11.2% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.parallelGaleShapley
+# Parameters: (fileName = testCases/WorstCase_1000.txt)
+
+# Run progress: 63.89% complete, ETA 00:14:17
+# Fork: 1 of 1
+# Warmup Iteration   1: 510.099 ms/op
+# Warmup Iteration   2: 487.396 ms/op
+# Warmup Iteration   3: 471.378 ms/op
+Iteration   1: 477.625 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 503.761 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 496.774 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 488.809 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 498.143 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.parallelGaleShapley":
+  493.022 ±(99.9%) 39.006 ms/op [Average]
+  (min, avg, max) = (477.625, 493.022, 503.761), stdev = 10.130
+  CI (99.9%): [454.016, 532.029] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.parallelGaleShapley:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+ 66.1%         TIMED_WAITING
+ 22.7%         RUNNABLE
+ 11.3%         WAITING
+
+....[Thread state: TIMED_WAITING]...................................................................
+ 66.1% 100.0% sun.misc.Unsafe.park
+
+....[Thread state: RUNNABLE]........................................................................
+ 11.3%  49.9% java.net.SocketInputStream.socketRead0
+  5.7%  25.2% smp.ParallelGaleShapley$Worker.run
+  5.6%  24.5% java.util.concurrent.ConcurrentLinkedQueue.offer
+  0.0%   0.1% sun.misc.Unsafe.park
+  0.0%   0.1% sun.misc.Unsafe.unpark
+  0.0%   0.0% java.util.concurrent.ConcurrentLinkedQueue.poll
+  0.0%   0.0% smp.ParallelGaleShapley.formatAssignment
+  0.0%   0.0% java.util.Formatter$FormatSpecifier.<init>
+  0.0%   0.0% java.util.concurrent.Executors$RunnableAdapter.call
+  0.0%   0.0% java.util.regex.Pattern$Branch.match
+
+....[Thread state: WAITING].........................................................................
+ 11.3% 100.0% sun.misc.Unsafe.park
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/BestCase_10.txt)
+
+# Run progress: 66.67% complete, ETA 00:13:12
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.014 ms/op
+# Warmup Iteration   2: 0.012 ms/op
+# Warmup Iteration   3: 0.011 ms/op
+Iteration   1: 0.011 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.011 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.011 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.011 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.011 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  0.011 ±(99.9%) 0.001 ms/op [Average]
+  (min, avg, max) = (0.011, 0.011, 0.011), stdev = 0.001
+  CI (99.9%): [0.011, 0.012] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 39.3%  39.3% smp.BipartiteGraph.<init>
+  4.2%   4.2% java.lang.String.valueOf
+  2.8%   2.8% smp.BipartiteGraph.getFinalMatchingGraphToString
+  1.9%   1.9% smp.SMP.performSMPAlgorithm
+  1.3%   1.3% java.util.HashMap.putVal
+  0.1%   0.1% bench.BenchmarkBestCases.serial
+  0.1%   0.1% bench.generated.BenchmarkBestCases_serial_jmhTest.serial_avgt_jmhStub
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.0%   0.0% java.util.LinkedList.linkLast
+  0.1%   0.1% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/BestCase_100.txt)
+
+# Run progress: 69.44% complete, ETA 00:12:06
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.086 ms/op
+# Warmup Iteration   2: 0.929 ms/op
+# Warmup Iteration   3: 0.926 ms/op
+Iteration   1: 0.927 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.929 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.931 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.929 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.926 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  0.929 ±(99.9%) 0.007 ms/op [Average]
+  (min, avg, max) = (0.926, 0.929, 0.931), stdev = 0.002
+  CI (99.9%): [0.921, 0.936] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 47.2%  47.2% smp.BipartiteGraph.<init>
+  1.0%   1.0% java.util.HashMap.hash
+  0.4%   0.4% java.lang.String.valueOf
+  0.4%   0.4% java.util.HashMap.resize
+  0.3%   0.3% smp.BipartiteGraph.engageOtherGenderToOptimalGender
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.1%   0.1% bench.generated.BenchmarkBestCases_serial_jmhTest.serial_avgt_jmhStub
+  0.1%   0.1% java.util.HashMap.putVal
+  0.0%   0.0% java.util.Arrays.copyOfRange
+  0.2%   0.2% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/BestCase_200.txt)
+
+# Run progress: 72.22% complete, ETA 00:11:00
+# Fork: 1 of 1
+# Warmup Iteration   1: 4.031 ms/op
+# Warmup Iteration   2: 3.466 ms/op
+# Warmup Iteration   3: 3.457 ms/op
+Iteration   1: 3.469 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 3.502 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 3.467 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 3.480 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 3.472 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  3.478 ±(99.9%) 0.054 ms/op [Average]
+  (min, avg, max) = (3.467, 3.478, 3.502), stdev = 0.014
+  CI (99.9%): [3.424, 3.533] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 48.6%  48.6% smp.BipartiteGraph.<init>
+  0.6%   0.6% java.util.HashMap.hash
+  0.2%   0.2% java.lang.String.valueOf
+  0.2%   0.2% java.util.HashMap.resize
+  0.2%   0.2% smp.BipartiteGraph.engageOtherGenderToOptimalGender
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.0%   0.0% java.util.LinkedList.linkLast
+  0.0%   0.0% java.lang.Integer.toString
+  0.0%   0.0% java.util.HashMap.putVal
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/BestCase_1000.txt)
+
+# Run progress: 75.00% complete, ETA 00:09:54
+# Fork: 1 of 1
+# Warmup Iteration   1: 102.622 ms/op
+# Warmup Iteration   2: 89.860 ms/op
+# Warmup Iteration   3: 90.020 ms/op
+Iteration   1: 90.340 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 89.904 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 89.924 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 90.243 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 89.886 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  90.060 ±(99.9%) 0.828 ms/op [Average]
+  (min, avg, max) = (89.886, 90.060, 90.340), stdev = 0.215
+  CI (99.9%): [89.232, 90.887] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 49.1%  49.1% smp.BipartiteGraph.<init>
+  0.2%   0.2% java.util.HashMap.hash
+  0.1%   0.1% java.util.LinkedList.linkLast
+  0.1%   0.1% java.lang.Integer.toString
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.1%   0.1% java.util.Arrays.copyOfRange
+  0.1%   0.1% java.util.HashMap.putVal
+  0.0%   0.0% java.util.HashMap.resize
+  0.0%   0.0% java.lang.String.valueOf
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/Random_10.txt)
+
+# Run progress: 77.78% complete, ETA 00:08:48
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.017 ms/op
+# Warmup Iteration   2: 0.014 ms/op
+# Warmup Iteration   3: 0.014 ms/op
+Iteration   1: 0.014 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.014 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.014 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.015 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.014 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  0.014 ±(99.9%) 0.001 ms/op [Average]
+  (min, avg, max) = (0.014, 0.014, 0.015), stdev = 0.001
+  CI (99.9%): [0.014, 0.015] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 30.3%  30.3% smp.BipartiteGraph.<init>
+  9.6%   9.6% java.util.LinkedList.indexOf
+  3.8%   3.8% smp.SMP.performSMPAlgorithm
+  3.0%   3.0% java.lang.String.valueOf
+  2.1%   2.1% smp.BipartiteGraph.getFinalMatchingGraphToString
+  0.8%   0.8% java.util.HashMap.putVal
+  0.2%   0.2% bench.BenchmarkBestCases.serial
+  0.1%   0.1% java.lang.Integer.toString
+  0.0%   0.0% java.lang.AbstractStringBuilder.<init>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/Random_100.txt)
+
+# Run progress: 80.56% complete, ETA 00:07:42
+# Fork: 1 of 1
+# Warmup Iteration   1: 1.441 ms/op
+# Warmup Iteration   2: 1.205 ms/op
+# Warmup Iteration   3: 1.212 ms/op
+Iteration   1: 1.222 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 1.204 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 1.207 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 1.209 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 1.200 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  1.208 ±(99.9%) 0.033 ms/op [Average]
+  (min, avg, max) = (1.200, 1.208, 1.222), stdev = 0.009
+  CI (99.9%): [1.175, 1.241] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 35.7%  35.7% smp.BipartiteGraph.<init>
+ 11.2%  11.2% java.util.LinkedList.indexOf
+  1.0%   1.0% smp.SMP.performSMPAlgorithm
+  0.4%   0.4% java.lang.String.valueOf
+  0.4%   0.4% java.util.HashMap.resize
+  0.4%   0.4% java.util.HashMap.hash
+  0.4%   0.4% java.util.HashMap.put
+  0.1%   0.1% bench.generated.BenchmarkBestCases_serial_jmhTest.serial_avgt_jmhStub
+  0.1%   0.1% java.util.HashMap.putVal
+  0.3%   0.3% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/Random_200.txt)
+
+# Run progress: 83.33% complete, ETA 00:06:36
+# Fork: 1 of 1
+# Warmup Iteration   1: 6.356 ms/op
+# Warmup Iteration   2: 5.519 ms/op
+# Warmup Iteration   3: 5.500 ms/op
+Iteration   1: 5.558 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 5.522 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 5.573 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 5.529 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 5.538 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  5.544 ±(99.9%) 0.082 ms/op [Average]
+  (min, avg, max) = (5.522, 5.544, 5.573), stdev = 0.021
+  CI (99.9%): [5.462, 5.626] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 34.7%  34.7% smp.BipartiteGraph.<init>
+ 13.6%  13.6% java.util.LinkedList.indexOf
+  0.7%   0.7% smp.SMP.performSMPAlgorithm
+  0.2%   0.2% java.util.HashMap.resize
+  0.2%   0.2% java.lang.String.valueOf
+  0.1%   0.1% java.util.HashMap.hash
+  0.1%   0.1% java.util.LinkedList.linkLast
+  0.1%   0.1% java.lang.Integer.toString
+  0.1%   0.1% bench.generated.BenchmarkBestCases_serial_jmhTest.serial_avgt_jmhStub
+  0.2%   0.2% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/Random_1000.txt)
+
+# Run progress: 86.11% complete, ETA 00:05:30
+# Fork: 1 of 1
+# Warmup Iteration   1: 163.709 ms/op
+# Warmup Iteration   2: 143.889 ms/op
+# Warmup Iteration   3: 145.073 ms/op
+Iteration   1: 144.194 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 143.037 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 142.240 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 142.365 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 142.638 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  142.895 ±(99.9%) 3.034 ms/op [Average]
+  (min, avg, max) = (142.240, 142.895, 144.194), stdev = 0.788
+  CI (99.9%): [139.861, 145.929] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 31.0%  31.0% smp.BipartiteGraph.<init>
+ 17.4%  17.4% java.util.LinkedList.indexOf
+  0.3%   0.3% java.util.HashMap.put
+  0.3%   0.3% java.util.HashMap.getNode
+  0.2%   0.2% smp.SMP.performSMPAlgorithm
+  0.2%   0.2% java.util.LinkedList.linkLast
+  0.2%   0.2% java.lang.Integer.toString
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.1%   0.1% java.util.HashMap.putVal
+  0.2%   0.2% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/WorstCase_10.txt)
+
+# Run progress: 88.89% complete, ETA 00:04:24
+# Fork: 1 of 1
+# Warmup Iteration   1: 0.025 ms/op
+# Warmup Iteration   2: 0.023 ms/op
+# Warmup Iteration   3: 0.023 ms/op
+Iteration   1: 0.023 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 0.023 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 0.023 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 0.023 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 0.023 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  0.023 ±(99.9%) 0.001 ms/op [Average]
+  (min, avg, max) = (0.023, 0.023, 0.023), stdev = 0.001
+  CI (99.9%): [0.022, 0.023] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 19.6%  19.6% smp.BipartiteGraph.<init>
+ 18.4%  18.4% java.util.LinkedList.indexOf
+  8.1%   8.1% smp.SMP.performSMPAlgorithm
+  1.9%   1.9% java.lang.String.valueOf
+  1.3%   1.3% smp.BipartiteGraph.getFinalMatchingGraphToString
+  0.5%   0.5% java.util.HashMap.putVal
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.1%   0.1% java.util.Arrays.copyOfRange
+  0.0%   0.0% java.lang.Integer.toString
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/WorstCase_100.txt)
+
+# Run progress: 91.67% complete, ETA 00:03:18
+# Fork: 1 of 1
+# Warmup Iteration   1: 7.123 ms/op
+# Warmup Iteration   2: 6.627 ms/op
+# Warmup Iteration   3: 6.732 ms/op
+Iteration   1: 6.639 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 6.623 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 6.667 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 6.660 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 6.688 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  6.655 ±(99.9%) 0.097 ms/op [Average]
+  (min, avg, max) = (6.623, 6.655, 6.688), stdev = 0.025
+  CI (99.9%): [6.559, 6.752] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 39.1%  39.1% java.util.LinkedList.indexOf
+  6.4%   6.4% smp.BipartiteGraph.<init>
+  4.0%   4.0% smp.SMP.performSMPAlgorithm
+  0.1%   0.1% java.lang.AbstractStringBuilder.<init>
+  0.1%   0.1% java.util.HashMap.resize
+  0.1%   0.1% java.lang.String.valueOf
+  0.1%   0.1% java.util.HashMap.hash
+  0.0%   0.0% java.util.Arrays.copyOfRange
+  0.0%   0.0% java.util.LinkedList.linkLast
+  0.1%   0.1% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/WorstCase_200.txt)
+
+# Run progress: 94.44% complete, ETA 00:02:12
+# Fork: 1 of 1
+# Warmup Iteration   1: 45.409 ms/op
+# Warmup Iteration   2: 43.907 ms/op
+# Warmup Iteration   3: 44.206 ms/op
+Iteration   1: 44.375 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 43.656 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 44.527 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 43.742 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 43.924 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  44.045 ±(99.9%) 1.492 ms/op [Average]
+  (min, avg, max) = (43.656, 44.045, 44.527), stdev = 0.387
+  CI (99.9%): [42.553, 45.536] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 42.9%  42.9% java.util.LinkedList.indexOf
+  4.0%   4.0% smp.BipartiteGraph.<init>
+  2.7%   2.7% smp.SMP.performSMPAlgorithm
+  0.1%   0.1% java.util.LinkedList.linkLast
+  0.0%   0.0% java.lang.AbstractStringBuilder.<init>
+  0.0%   0.0% java.util.Arrays.copyOfRange
+  0.0%   0.0% java.util.HashMap.resize
+  0.0%   0.0% java.lang.Integer.valueOf
+  0.0%   0.0% java.lang.Integer.toString
+  0.1%   0.1% <other>
+
+
+
+# JMH version: 1.21
+# VM version: JDK 1.8.0_181, OpenJDK 64-Bit Server VM, 25.181-b13
+# VM invoker: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+# VM options: -javaagent:/lib/idea_rt.jar=42799:/bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 5 s each
+# Measurement: 5 iterations, 10 s each
+# Timeout: 1 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: bench.BenchmarkBestCases.serial
+# Parameters: (fileName = testCases/WorstCase_1000.txt)
+
+# Run progress: 97.22% complete, ETA 00:01:06
+# Fork: 1 of 1
+# Warmup Iteration   1: 9689.713 ms/op
+# Warmup Iteration   2: 8567.896 ms/op
+# Warmup Iteration   3: 9781.889 ms/op
+Iteration   1: 8843.065 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   2: 10014.426 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   3: 9906.229 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   4: 10252.221 ms/op
+                 ·stack: <delayed till summary>
+
+Iteration   5: 7996.763 ms/op
+                 ·stack: <delayed till summary>
+
+
+
+Result "bench.BenchmarkBestCases.serial":
+  9402.541 ±(99.9%) 3672.919 ms/op [Average]
+  (min, avg, max) = (7996.763, 9402.541, 10252.221), stdev = 953.846
+  CI (99.9%): [5729.621, 13075.460] (assumes normal distribution)
+
+Secondary result "bench.BenchmarkBestCases.serial:·stack":
+Stack profiler:
+
+....[Thread state distributions]....................................................................
+100.0%         RUNNABLE
+
+....[Thread state: RUNNABLE]........................................................................
+ 50.0%  50.0% java.net.SocketInputStream.socketRead0
+ 48.3%  48.3% java.util.LinkedList.indexOf
+  0.5%   0.5% smp.BipartiteGraph.<init>
+  0.4%   0.4% java.util.HashMap.getNode
+  0.4%   0.4% smp.SMP.performSMPAlgorithm
+  0.2%   0.2% java.util.HashMap.put
+  0.1%   0.1% java.util.HashMap.putVal
+  0.1%   0.1% java.lang.Integer.stringSize
+  0.0%   0.0% java.lang.Integer.getChars
+  0.0%   0.0% java.lang.StringBuilder.append
+
+
+
+# Run complete. Total time: 00:40:13
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                                             (fileName)  Mode  Cnt     Score      Error  Units
+BenchmarkBestCases.divideAndConquerCallable            testCases/BestCase_10.txt  avgt    5     0.165 ±    0.008  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack     testCases/BestCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable           testCases/BestCase_100.txt  avgt    5     0.702 ±    0.029  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack    testCases/BestCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable           testCases/BestCase_200.txt  avgt    5     2.199 ±    0.052  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack    testCases/BestCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable          testCases/BestCase_1000.txt  avgt    5    49.809 ±    2.701  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack   testCases/BestCase_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable              testCases/Random_10.txt  avgt    5     0.171 ±    0.006  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack       testCases/Random_10.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable             testCases/Random_100.txt  avgt    5     1.016 ±    0.022  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack      testCases/Random_100.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable             testCases/Random_200.txt  avgt    5     3.522 ±    0.073  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack      testCases/Random_200.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable            testCases/Random_1000.txt  avgt    5    75.136 ±    1.266  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack     testCases/Random_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable           testCases/WorstCase_10.txt  avgt    5     0.174 ±    0.011  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack    testCases/WorstCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable          testCases/WorstCase_100.txt  avgt    5     2.012 ±    0.022  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack   testCases/WorstCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable          testCases/WorstCase_200.txt  avgt    5     8.539 ±    0.155  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack   testCases/WorstCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.divideAndConquerCallable         testCases/WorstCase_1000.txt  avgt    5   397.773 ±    7.513  ms/op
+BenchmarkBestCases.divideAndConquerCallable:·stack  testCases/WorstCase_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                 testCases/BestCase_10.txt  avgt    5     0.177 ±    0.010  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack          testCases/BestCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                testCases/BestCase_100.txt  avgt    5     0.372 ±    0.013  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack         testCases/BestCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                testCases/BestCase_200.txt  avgt    5     0.568 ±    0.038  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack         testCases/BestCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley               testCases/BestCase_1000.txt  avgt    5     2.185 ±    0.078  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack        testCases/BestCase_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                   testCases/Random_10.txt  avgt    5     0.177 ±    0.007  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack            testCases/Random_10.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                  testCases/Random_100.txt  avgt    5     0.387 ±    0.018  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack           testCases/Random_100.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                  testCases/Random_200.txt  avgt    5     0.727 ±    0.007  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack           testCases/Random_200.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                 testCases/Random_1000.txt  avgt    5     3.811 ±    0.089  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack          testCases/Random_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley                testCases/WorstCase_10.txt  avgt    5     0.184 ±    0.017  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack         testCases/WorstCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley               testCases/WorstCase_100.txt  avgt    5     1.113 ±    0.048  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack        testCases/WorstCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley               testCases/WorstCase_200.txt  avgt    5     5.720 ±    0.904  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack        testCases/WorstCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.parallelGaleShapley              testCases/WorstCase_1000.txt  avgt    5   493.022 ±   39.006  ms/op
+BenchmarkBestCases.parallelGaleShapley:·stack       testCases/WorstCase_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                              testCases/BestCase_10.txt  avgt    5     0.011 ±    0.001  ms/op
+BenchmarkBestCases.serial:·stack                       testCases/BestCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                             testCases/BestCase_100.txt  avgt    5     0.929 ±    0.007  ms/op
+BenchmarkBestCases.serial:·stack                      testCases/BestCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                             testCases/BestCase_200.txt  avgt    5     3.478 ±    0.054  ms/op
+BenchmarkBestCases.serial:·stack                      testCases/BestCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                            testCases/BestCase_1000.txt  avgt    5    90.060 ±    0.828  ms/op
+BenchmarkBestCases.serial:·stack                     testCases/BestCase_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                                testCases/Random_10.txt  avgt    5     0.014 ±    0.001  ms/op
+BenchmarkBestCases.serial:·stack                         testCases/Random_10.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                               testCases/Random_100.txt  avgt    5     1.208 ±    0.033  ms/op
+BenchmarkBestCases.serial:·stack                        testCases/Random_100.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                               testCases/Random_200.txt  avgt    5     5.544 ±    0.082  ms/op
+BenchmarkBestCases.serial:·stack                        testCases/Random_200.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                              testCases/Random_1000.txt  avgt    5   142.895 ±    3.034  ms/op
+BenchmarkBestCases.serial:·stack                       testCases/Random_1000.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                             testCases/WorstCase_10.txt  avgt    5     0.023 ±    0.001  ms/op
+BenchmarkBestCases.serial:·stack                      testCases/WorstCase_10.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                            testCases/WorstCase_100.txt  avgt    5     6.655 ±    0.097  ms/op
+BenchmarkBestCases.serial:·stack                     testCases/WorstCase_100.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                            testCases/WorstCase_200.txt  avgt    5    44.045 ±    1.492  ms/op
+BenchmarkBestCases.serial:·stack                     testCases/WorstCase_200.txt  avgt            NaN               ---
+BenchmarkBestCases.serial                           testCases/WorstCase_1000.txt  avgt    5  9402.541 ± 3672.919  ms/op
+BenchmarkBestCases.serial:·stack                    testCases/WorstCase_1000.txt  avgt            NaN               ---
+
+Process finished with exit code 0
